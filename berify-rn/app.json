@@ -1,14 +1,18 @@
 {
   "expo": {
-    "name": "testflow-mobile",
-    "description": "A very interesting project.",
-    "slug": "testflow-mobile",
+    "name": "Tab Navigation Template",
+    "slug": "berify-rn",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
-    "platforms": ["ios", "android"],
+    "sdkVersion": "36.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
