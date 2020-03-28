@@ -1,0 +1,16 @@
+{
+  "name": "berify-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "deploy": "truffle migrate --network extdev_plasma_us1 --reset",
+    "start": "node src/server"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^2.5.0",
+    "dotenv": "^8.2.0",
+    "loom-js": "^1.55.0",
+    "loom-truffle-provider": "^0.13.0"
+  }
+}
