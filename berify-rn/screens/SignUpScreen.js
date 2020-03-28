@@ -4,7 +4,6 @@ import { Image, View } from 'react-native';
 import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { LANDING } from '../assets/images';
 import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh

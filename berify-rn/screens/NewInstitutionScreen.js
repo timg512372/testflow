@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Image, View } from 'react-native';
 
-import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
+import { Text, Input, Button, Select } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { LANDING } from '../assets/images';
@@ -10,11 +10,10 @@ import {
     heightPercentageToDP as vh
 } from 'react-native-responsive-screen';
 
-class LoginScreen extends React.Component {
+class NewInstitutionScreen extends React.Component {
     state = {
-        username: '',
-        password: '',
-        pconfirm: '',
+        name: '',
+        type: '',
         code: '',
         error: ''
     };
@@ -50,33 +49,30 @@ class LoginScreen extends React.Component {
                             category="h1"
                             style={{ marginTop: vh(13), marginLeft: 20, fontWeight: '700' }}
                         >
-                            Log In
+                            Create New Institution
                         </Text>
                         <Input
-                            placeholder="Username"
+                            placeholder="Institution Name"
                             value={this.state.username}
-                            onChangeText={val => this.setState({ username: val })}
+                            onChangeText={val => this.setState({ name: val })}
                             style={{ margin: 10, borderRadius: 8 }}
                         />
-                        <Input
-                            placeholder="Password"
-                            value={this.state.password}
-                            onChangeText={val => this.setState({ password: val })}
-                            style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
-                            secureTextEntry={true}
-                        />
-                        <Input
-                            placeholder="Confirm Password"
-                            value={this.state.pconfirm}
-                            onChangeText={val => this.setState({ pconfirm: val })}
-                            style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
-                            secureTextEntry={true}
-                        />
+
                         <Input
                             placeholder="Insitution Code"
                             value={this.state.code}
                             onChangeText={val => this.setState({ code: val })}
-                            style={{ margin: 10, borderRadius: 8 }}
+                            style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
+                        />
+                        <Select
+                            data={[
+                                { text: 'Producer' },
+                                { text: 'Tester' },
+                                { text: 'Laboratory' }
+                            ]}
+                            selectedOption={this.state.type}
+                            onSelect={val => this.setState({ type: val })}
+                            style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
                         />
                         <View
                             style={{
@@ -92,8 +88,12 @@ class LoginScreen extends React.Component {
                             >
                                 Continue
                             </Button>
-                            <Button size="small" appearance="ghost">
-                                Create an Account
+                            <Button
+                                size="small"
+                                appearance="ghost"
+                                onPress={() => this.props.navigation.push('Landing')}
+                            >
+                                Back
                             </Button>
                         </View>
                         <Text status="warning">{this.state.error}</Text>
@@ -104,4 +104,4 @@ class LoginScreen extends React.Component {
     }
 }
 
-export default LoginScreen;
+export default NewInstitutionScreen;

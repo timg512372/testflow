@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '@ui-kitten/components';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import * as Permissions from 'expo-permissions';
 
@@ -22,24 +23,19 @@ class QRScanner extends Component {
             );
         } else if (this.state.permission == 'granted') {
             content = (
-                <View>
-                    <Text style={{ textAlign: 'center' }}>Scan below please</Text>
-                    <BarCodeScanner
-                        style={{ height: 400 }}
-                        onBarCodeScanned={({ type, data }) => console.log(data)}
-                    />
-                </View>
+                <BarCodeScanner
+                    style={{ flex: 1 }}
+                    onBarCodeScanned={this.props.onBarCodeScanned}
+                />
             );
         }
 
         return (
             <View
                 style={{
-                    flex: 1,
                     flexDirection: 'column',
                     alignItems: 'stretch',
-                    padding: '5%',
-                    backgroundColor: 'pink'
+                    flex: 1
                 }}
             >
                 {content}

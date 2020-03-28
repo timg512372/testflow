@@ -3,6 +3,10 @@ import { light } from '@eva-design/eva';
 export const myTheme = {
     ...light,
 
+    strict: {
+        'text-font-family': 'Lato'
+    },
+
     'color-primary-100': '#DBE7FA',
     'color-primary-200': '#B9CEF6',
     'color-primary-300': '#91ACE6',

@@ -38,9 +38,9 @@ class LandingScreen extends React.Component {
                     size="giant"
                     status="basic"
                     textStyle={{ fontWeight: '300', fontSize: 25 }}
-                    onPress={() => this.props.navigation.push('SignUp')}
+                    onPress={() => this.props.navigation.push('NewInstitution')}
                 >
-                    Register
+                    Register your Institution
                 </Button>
             </View>
         );
