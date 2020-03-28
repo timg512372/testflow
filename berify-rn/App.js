@@ -5,63 +5,130 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { mapping } from '@eva-design/eva';
+import { ApplicationProvider } from '@ui-kitten/components';
+import { Provider } from 'react-redux';
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import useLinking from './navigation/useLinking';
+import { store } from './redux/store';
+import LandingScreen from './screens/LandingScreen';
+import LoginScreen from './screens/LoginScreen';
+import ScanScreen from './screens/ScanScreen';
+import SignUpScreen from './screens/SignUpScreen';
 
-const Stack = createStackNavigator();
+import { myTheme } from './theme';
 
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
-  const [initialNavigationState, setInitialNavigationState] = React.useState();
-  const containerRef = React.useRef();
-  const { getInitialState } = useLinking(containerRef);
+class App extends React.Component {
+    state = {
+        isLoadingComplete: false,
+        setLoadingComplete: false
+    };
 
-  // Load any resources or data that we need prior to rendering the app
-  React.useEffect(() => {
-    async function loadResourcesAndDataAsync() {
-      try {
-        SplashScreen.preventAutoHide();
+    async componentDidMount() {
+        try {
+            SplashScreen.preventAutoHide();
 
-        // Load our initial navigation state
-        setInitialNavigationState(await getInitialState());
-
-        // Load fonts
-        await Font.loadAsync({
-          ...Ionicons.font,
-          'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-        });
-      } catch (e) {
-        // We might want to provide this error information to an error reporting service
-        console.warn(e);
-      } finally {
-        setLoadingComplete(true);
-        SplashScreen.hide();
-      }
+            // Load fonts
+            await Font.loadAsync({
+                ...Ionicons.font,
+                'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf')
+            });
+        } catch (e) {
+            // We might want to provide this error information to an error reporting service
+            console.warn(e);
+        } finally {
+            this.setState({ setLoadingComplete: true });
+            SplashScreen.hide();
+        }
     }
 
-    loadResourcesAndDataAsync();
-  }, []);
+    render() {
+        const Stack = createStackNavigator();
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return null;
-  } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
-    );
-  }
+        let AuthScreens = (
+            <>
+                <Stack.Screen name="Landing" component={LandingScreen} />
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="SignUp" component={SignUpScreen} />
+            </>
+        );
+
+        let FactoryScreens = (
+            <>
+                <Stack.Screen name="Scan" component={ScanScreen} />
+            </>
+        );
+
+        if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+            return <ApplicationProvider mapping={mapping} theme={myTheme}></ApplicationProvider>;
+        } else {
+            return (
+                <Provider store={store}>
+                    <ApplicationProvider mapping={mapping} theme={myTheme}>
+                        <NavigationContainer>
+                            <Stack.Navigator headerMode={null}>{AuthScreens}</Stack.Navigator>
+                        </NavigationContainer>
+                    </ApplicationProvider>
+                </Provider>
+            );
+        }
+    }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+export default App;
+
+// export default function App(props) {
+//     const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+
+//     // Load any resources or data that we need prior to rendering the app
+//     React.useEffect(() => {
+//         async function loadResourcesAndDataAsync() {
+//             try {
+//                 SplashScreen.preventAutoHide();
+
+//                 // Load fonts
+//                 await Font.loadAsync({
+//                     ...Ionicons.font,
+//                     'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf')
+//                 });
+//             } catch (e) {
+//                 // We might want to provide this error information to an error reporting service
+//                 console.warn(e);
+//             } finally {
+//                 setLoadingComplete(true);
+//                 SplashScreen.hide();
+//             }
+//         }
+
+//         loadResourcesAndDataAsync();
+//     }, []);
+
+//     const Stack = createStackNavigator();
+
+//     let AuthScreens = (
+//         <>
+//             <Stack.Screen name="Landing" component={LandingScreen} />
+//             <Stack.Screen name="Login" component={LoginScreen} />
+//             <Stack.Screen name="SignUp" component={SignUpScreen} />
+//         </>
+//     );
+
+//     let FactoryScreens = (
+//         <>
+//             <Stack.Screen name="Scan" component={ScanScreen} />
+//         </>
+//     );
+
+//     if (!isLoadingComplete && !props.skipLoadingScreen) {
+//         return <ApplicationProvider mapping={mapping} theme={myTheme}></ApplicationProvider>;
+//     } else {
+//         return (
+//             <Provider store={store}>
+//                 <ApplicationProvider mapping={mapping} theme={myTheme}>
+//                     <NavigationContainer>
+//                         <Stack.Navigator headerMode={null}>{AuthScreens}</Stack.Navigator>
+//                     </NavigationContainer>
+//                 </ApplicationProvider>
+//             </Provider>
+//         );
+//     }
+// }

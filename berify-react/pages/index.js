@@ -43,23 +43,7 @@ class HomePage extends Component {
                 >
                     <div style={{ width: '60vw', paddingLeft: '8vw', marginRight: '5vw' }}>
                         <h1 style={{ color: '#FF8282' }}> Our Mission</h1>
-                        <div style={{ fontSize: '130%' }}>
-                            Between 1 in 4 and 1 in 3 U.S. students reported to have been bullied at
-                            school. Most bullying happens in middle school. The most common types
-                            are verbal and social bullying. There is not a single profile of a young
-                            person involved in bullying. Youth who bully can be either well
-                            connected socially or marginalized, and may be bullied by others as
-                            well. Similarly, those who are bullied sometimes bully others. The most
-                            concerning statistic is that only about 20 to 30% of students who are
-                            bullied notify adults about the bullying.
-                            <br />
-                            <br />
-                            Invisible Ink utilizes blockchain to encrypt messages between an
-                            administrator and user. The identity of the user would not be
-                            accessible, but the exchange would be recorded. Invisible Ink would be
-                            beneficial to students who are too afraid to talk to an adult because it
-                            would protect their identity.
-                        </div>
+                        <div style={{ fontSize: '130%' }}>Test kits get lost a lot</div>
                     </div>
                     <div
                         style={{

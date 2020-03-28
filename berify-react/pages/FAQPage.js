@@ -20,14 +20,15 @@ class FAQPage extends Component {
 
         return <Collapse bordered={false}>{content}</Collapse>;
     }
+
     render() {
         return (
             <div>
                 <NextSeo
-                    title="FAQ | FairLegal"
-                    twitter={{ title: 'FAQ | FairLegal' }}
+                    title="FAQ | Berify"
+                    twitter={{ title: 'FAQ | Berify' }}
                     openGraph={{
-                        title: 'FAQ | FairLegal'
+                        title: 'FAQ | Berify'
                     }}
                 />
 
