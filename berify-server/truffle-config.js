@@ -4,7 +4,7 @@ const LoomTruffleProvider = require("loom-truffle-provider");
 const { PRIVATE_KEY } = process.env;
 
 module.exports = {
-  contracts_build_directory: join(__dirname, "../src/contracts"),
+  contracts_build_directory: join(__dirname, "./src/contracts"),
   networks: {
     extdev_plasma_us1: {
       provider: function() {
