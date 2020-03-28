@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Tabs, Radio, Button, Select, Input, Modal } from 'antd';
 import * as types from '../redux/types';
 import { Router } from '../routes';
-
+//comment
 class TrackerPage extends Component {
     static async getInitialProps({ store }) {
         store.dispatch({ type: types.CHANGE_PAGE, payload: 'g' });
