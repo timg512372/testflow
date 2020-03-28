@@ -1,13 +1,11 @@
+import React, { Component } from 'react';
 import Link from 'next/link';
 import { Router } from '../routes';
 import { connect } from 'react-redux';
 import { Popover, Icon } from 'antd';
 import UserInfo from './UserInfo';
 import axios from 'axios';
-//import { setCurrentUser } from '../redux/actions/auth_actions';
-
-import React, { Component } from 'react';
-
+import { QuestionCircleOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons';
 import '../styles.less';
 
 const MUST_LOG_IN = [''];
@@ -38,13 +36,8 @@ class Toolbar extends Component {
                                     alignItems: 'center'
                                 }}
                             >
-                                <Icon
-                                    type={icon}
-                                    size={20}
-                                    style={{
-                                        marginRight: 5
-                                    }}
-                                />
+                                {icon}
+                                <div style={{ width: '5px' }}></div>
                                 {name}
                             </div>
                         </a>
@@ -55,11 +48,11 @@ class Toolbar extends Component {
                         color: #000000;
                     }
                     a:hover {
-                        color: #ff8282;
+                        color: #425eac;
                         text-decoration: none;
                     }
                     .active {
-                        color: #ff8282;
+                        color: #425eac;
                         text-decoration: none;
                     }
                     ul {
@@ -100,9 +93,8 @@ class Toolbar extends Component {
                             >
                                 <img
                                     src="/static/logo.png"
-                                    style={{ height: '6vh', marginTop: '0vh' }}
+                                    style={{ height: '4vh', marginTop: '0vh' }}
                                 />
-                                &ensp;<div style={{ color: '#FF8282' }}>Invisible Ink</div>
                             </a>
                         </div>
 
@@ -112,10 +104,10 @@ class Toolbar extends Component {
                                 fontWeight: 'bold',
                                 display: 'flex',
                                 flexDirection: 'row',
-                                alignItems: 'center'
+                                alignItems: 'center',
+                                marginTop: '0.5vh'
                             }}
                         >
-                            {/* Render collection of links */}
                             <ul
                                 className="navbar-nav mr-auto"
                                 style={{
@@ -123,11 +115,28 @@ class Toolbar extends Component {
                                     flexDirection: 'row'
                                 }}
                             >
-                                {this.props.isAuthenticated
-                                    ? this.renderLink('My Inks', 'i', 'copy', '/inks')
-                                    : null}
+                                {this.renderLink(
+                                    'Test Kit Tracker',
+                                    't',
+                                    <DashboardOutlined />,
+                                    '/tracker'
+                                )}
 
-                                {this.renderLink('FAQ', 'q', 'question-circle', '/faq')}
+                                {this.renderLink(
+                                    'Test Results',
+                                    'r',
+                                    <QuestionCircleOutlined />,
+                                    '/results'
+                                )}
+
+                                {this.renderLink(
+                                    'Generate New Codes',
+                                    'g',
+                                    <QuestionCircleOutlined />,
+                                    '/newcode'
+                                )}
+
+                                {this.renderLink('FAQ', 'q', <QuestionCircleOutlined />, '/faq')}
 
                                 <Popover
                                     content={<UserInfo />}
@@ -148,8 +157,7 @@ class Toolbar extends Component {
                                                 alignItems: 'center'
                                             }}
                                         >
-                                            <Icon
-                                                type="user"
+                                            <UserOutlined
                                                 size={20}
                                                 style={{
                                                     marginRight: '5px'
@@ -169,11 +177,11 @@ class Toolbar extends Component {
                             color: #000000;
                         }
                         a:hover {
-                            color: #ff8282;
+                            color: #425eac;
                             text-decoration: none;
                         }
                         .active {
-                            color: #ff8282;
+                            color: #425eac;
                             text-decoration: none;
                         }
                         ul {

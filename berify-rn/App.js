@@ -96,7 +96,7 @@ class App extends React.Component {
                         customMapping={customMapping}
                     >
                         <NavigationContainer>
-                            <Stack.Navigator headerMode={null}>{FactoryScreens}</Stack.Navigator>
+                            <Stack.Navigator headerMode={null}>{HospitalScreens}</Stack.Navigator>
                         </NavigationContainer>
                     </ApplicationProvider>
                 </Provider>

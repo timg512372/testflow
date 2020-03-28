@@ -36,24 +36,63 @@ class HospitalScreen extends React.Component {
                         {point.date}
                     </Text>
                     <Text style={{ color: `#2B4899` }} category="h3">
-                        {point.num} Test Kits Exported
+                        {point.num} Test Kits Processed
                     </Text>
                 </View>
             );
         });
 
         bubbles.push(
-            <Button
-                style={{
-                    width: '100%'
-                }}
-                key="button"
-                size="giant"
-                appearance="outline"
-                onPress={() => this.props.navigation.push('Scan')}
-            >
-                Export More Kits
-            </Button>
+            <>
+                <Button
+                    style={{
+                        width: '100%'
+                    }}
+                    key="button"
+                    size="giant"
+                    appearance="outline"
+                    onPress={() =>
+                        this.props.navigation.push('Scan', {
+                            action: '',
+                            text: 'Scanning kits arriving at hospital'
+                        })
+                    }
+                >
+                    Process Arriving Kits
+                </Button>
+                <Button
+                    style={{
+                        width: '100%'
+                    }}
+                    key="button"
+                    size="giant"
+                    appearance="outline"
+                    onPress={() =>
+                        this.props.navigation.push('Scan', {
+                            action: '',
+                            text: 'Scanning kits that just received samples '
+                        })
+                    }
+                >
+                    Use Kits
+                </Button>
+                <Button
+                    style={{
+                        width: '100%'
+                    }}
+                    key="button"
+                    size="giant"
+                    appearance="outline"
+                    onPress={() =>
+                        this.props.navigation.push('Scan', {
+                            action: '',
+                            text: 'Scanning kits leaving the hospital'
+                        })
+                    }
+                >
+                    Send Kits To Lab
+                </Button>
+            </>
         );
 
         return bubbles;
@@ -81,7 +120,7 @@ class HospitalScreen extends React.Component {
                     }}
                     category="h1"
                 >
-                    Hospital Dashboard whatever
+                    Hospital Dashboard
                 </Text>
                 <View
                     style={{

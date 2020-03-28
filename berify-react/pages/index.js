@@ -7,7 +7,7 @@ class HomePage extends Component {
             <div style={{ width: '100%' }}>
                 <div
                     style={{
-                        backgroundColor: '#FF8282',
+                        backgroundColor: '#425eac',
                         width: '100%',
                         padding: '40px',
                         display: 'flex',
@@ -25,10 +25,10 @@ class HomePage extends Component {
                                 marginBottom: 0
                             }}
                         >
-                            Welcome to Invisible Ink
+                            Welcome to TestFlow
                         </h2>
                         <h2 style={{ color: 'white', fontSize: 20 }}>
-                            Report bullying anonymously
+                            Securely Track COVID-19 Tests
                         </h2>
                     </div>
                     <img alt="bubble" src="/static/bubble.png" />
@@ -43,35 +43,7 @@ class HomePage extends Component {
                 >
                     <div style={{ width: '60vw', paddingLeft: '8vw', marginRight: '5vw' }}>
                         <h1 style={{ color: '#FF8282' }}> Our Mission</h1>
-                        <div style={{ fontSize: '130%' }}>Test kits get lost a lot</div>
-                    </div>
-                    <div
-                        style={{
-                            borderRadius: '10px',
-                            backgroundColor: '#FF8282',
-                            width: '27vw',
-                            display: 'flex',
-                            alignItems: 'center',
-                            flexDirection: 'column',
-                            padding: '60px 15px 60px 15px',
-                            height: '60%'
-                        }}
-                    >
-                        <h1 style={{ color: '#FFFFFF' }}>Get Started Today!</h1>
-                        <Button.Group size="large">
-                            <Button href="/register/student" size="large">
-                                {' '}
-                                I'm a Student{' '}
-                            </Button>
-                            <Button href="/register/admin" size="large">
-                                {' '}
-                                I'm an Administrator
-                            </Button>
-                        </Button.Group>
-                        <h4 style={{ color: '#FFFFFF', margin: '10px' }}>
-                            {' '}
-                            Sign in to your account in the Profile tab{' '}
-                        </h4>
+                        <div style={{ fontSize: '130%' }}>William fill the rest of this page</div>
                     </div>
                 </div>
                 <div
