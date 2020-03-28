@@ -7,32 +7,49 @@ class HomePage extends Component {
             <div style={{ width: '100%' }}>
                 <div
                     style={{
-                        backgroundColor: '#425eac',
+                        backgroundColor: '#2D4A98',
                         width: '100%',
-                        padding: '40px',
+                        paddingLeft: '80px',
+                        paddingRight: '40px',
                         display: 'flex',
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between'
                     }}
                 >
+                    {/*Welcome Banner*/}
                     <div>
                         <h2
                             style={{
                                 color: 'white',
-                                fontSize: 50,
+                                fontSize: 80,
                                 fontWeight: 'bold',
-                                marginBottom: 0
+                                marginBottom: 0,
+                                paddingLeft: '40px',
+                                lineHeight: '100%'
                             }}
                         >
                             Welcome to TestFlow
                         </h2>
-                        <h2 style={{ color: 'white', fontSize: 20 }}>
+                        <h2 style={{ 
+                            color: 'white', 
+                            fontSize: 20,
+                            paddingTop: '40px',
+                            paddingLeft: '40px'
+                            }}
+                        >
                             Securely Track COVID-19 Tests
                         </h2>
                     </div>
-                    <img alt="bubble" src="/static/bubble.png" />
+                    <img style={{
+                                paddingTop: '20px',
+                                paddingRight: '40px',
+                                width: '40vw',
+                                height: '30vw'
+                            }}
+                    alt="scanQR" src="/static/scanQR.png" />
                 </div>
+                <img style= {{width: '100%', height: undefined}} alt="waveBanner" src="/static/waveBanner.png" />
                 <div
                     style={{
                         width: '100%',
@@ -41,9 +58,20 @@ class HomePage extends Component {
                         flexDirection: 'row'
                     }}
                 >
-                    <div style={{ width: '60vw', paddingLeft: '8vw', marginRight: '5vw' }}>
-                        <h1 style={{ color: '#FF8282' }}> Our Mission</h1>
-                        <div style={{ fontSize: '130%' }}>William fill the rest of this page</div>
+
+                {/*Description*/}
+                    <div style={{ 
+                        width: '100%',
+                        textAlign: 'center'
+                    }}>
+                        <h1 style={{ 
+                            padding: '5vw',
+                            color: '#0C1752'
+                        }}>
+                         TestFlow tracks test inventory on the blockchain, securing your testing results
+                         </h1>
+                         <h1>The Process</h1>
+                         <h2>Everytime your testing kit is moved, its QR code will be scanned</h2>
                     </div>
                 </div>
                 <div
