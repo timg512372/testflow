@@ -1,21 +1,23 @@
 import * as React from 'react';
 import { Image, View } from 'react-native';
-
+import { connect } from 'react-redux';
 import { Text, Input, Button, Select } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
-
-import { LANDING } from '../assets/images';
 import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh
 } from 'react-native-responsive-screen';
+
+import { LANDING } from '../assets/images';
+import LocationPicker from '../components/LocationPicker';
 
 class NewInstitutionScreen extends React.Component {
     state = {
         name: '',
         type: '',
         code: '',
-        error: ''
+        error: '',
+        location: ''
     };
 
     render() {
@@ -74,6 +76,9 @@ class NewInstitutionScreen extends React.Component {
                             onSelect={val => this.setState({ type: val })}
                             style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
                         />
+
+                        <LocationPicker getLocation={location => this.setState({ location })} />
+
                         <View
                             style={{
                                 view: 1,
@@ -91,7 +96,7 @@ class NewInstitutionScreen extends React.Component {
                             <Button
                                 size="small"
                                 appearance="ghost"
-                                onPress={() => this.props.navigation.push('Landing')}
+                                onPress={() => this.props.navigation.goBack()}
                             >
                                 Back
                             </Button>
@@ -104,4 +109,4 @@ class NewInstitutionScreen extends React.Component {
     }
 }
 
-export default NewInstitutionScreen;
+export default connect()(NewInstitutionScreen);

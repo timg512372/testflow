@@ -11,15 +11,8 @@ import { TOP } from '../assets/images';
 
 class HospitalScreen extends React.Component {
     renderData = () => {
-        const dummyData = [
-            { date: 'March 14, 2020', num: 189 },
-            { date: 'March 13, 2020', num: 76 },
-            { date: 'March 12, 2020', num: 72 },
-            { date: 'March 11, 2020', num: 0 }
-        ];
-
-        const bubbles = dummyData.map(point => {
-            return (
+        return (
+            <>
                 <View
                     style={{
                         borderWidth: 3,
@@ -30,25 +23,34 @@ class HospitalScreen extends React.Component {
                         width: '100%',
                         padding: 5
                     }}
-                    key={point.date}
+                    key="inv"
                 >
-                    <Text style={{ color: `#656565` }} category="c1">
-                        {point.date}
-                    </Text>
                     <Text style={{ color: `#2B4899` }} category="h3">
-                        {point.num} Test Kits Processed
+                        {120} Kits in Inventory
                     </Text>
                 </View>
-            );
-        });
-
-        bubbles.push(
-            <>
+                <View
+                    style={{
+                        borderWidth: 3,
+                        borderRadius: 8,
+                        borderStyle: 'solid',
+                        borderColor: '#F2F2F2',
+                        marginBottom: 5,
+                        width: '100%',
+                        padding: 5
+                    }}
+                    key="send"
+                >
+                    <Text style={{ color: `#2B4899` }} category="h3">
+                        {80} Kits to Send to Labs
+                    </Text>
+                </View>
                 <Button
                     style={{
-                        width: '100%'
+                        width: '100%',
+                        marginBottom: 10
                     }}
-                    key="button"
+                    key="arrive"
                     size="giant"
                     appearance="outline"
                     onPress={() =>
@@ -62,15 +64,16 @@ class HospitalScreen extends React.Component {
                 </Button>
                 <Button
                     style={{
-                        width: '100%'
+                        width: '100%',
+                        marginBottom: 10
                     }}
-                    key="button"
+                    key="middle"
                     size="giant"
                     appearance="outline"
                     onPress={() =>
                         this.props.navigation.push('Scan', {
                             action: '',
-                            text: 'Scanning kits that just received samples '
+                            text: 'Scanning kits that just received samples'
                         })
                     }
                 >
@@ -78,9 +81,10 @@ class HospitalScreen extends React.Component {
                 </Button>
                 <Button
                     style={{
-                        width: '100%'
+                        width: '100%',
+                        marginBottom: 10
                     }}
-                    key="button"
+                    key="leave"
                     size="giant"
                     appearance="outline"
                     onPress={() =>
@@ -94,8 +98,6 @@ class HospitalScreen extends React.Component {
                 </Button>
             </>
         );
-
-        return bubbles;
     };
 
     render() {
@@ -120,7 +122,7 @@ class HospitalScreen extends React.Component {
                     }}
                     category="h1"
                 >
-                    Hospital Dashboard
+                    Hoag Irvine Dashboard
                 </Text>
                 <View
                     style={{

@@ -11,14 +11,12 @@ import { TOP } from '../assets/images';
 
 class LabScreen extends React.Component {
     renderData = () => {
-        const dummyData = [
-            { date: 'March 14, 2020', num: 189 },
-            { date: 'March 13, 2020', num: 76 },
-            { date: 'March 12, 2020', num: 72 },
-            { date: 'March 11, 2020', num: 0 }
+        const categories = [
+            { text: 'Test Kits to Process', num: 189 },
+            { text: 'Test Kits Processed', num: 76 }
         ];
 
-        const bubbles = dummyData.map(point => {
+        const bubbles = categories.map(point => {
             return (
                 <View
                     style={{
@@ -30,30 +28,51 @@ class LabScreen extends React.Component {
                         width: '100%',
                         padding: 5
                     }}
-                    key={point.date}
+                    key={point.text}
                 >
-                    <Text style={{ color: `#656565` }} category="c1">
-                        {point.date}
-                    </Text>
                     <Text style={{ color: `#2B4899` }} category="h3">
-                        {point.num} Test Kits Exported
+                        {point.num} {point.text}
                     </Text>
                 </View>
             );
         });
 
         bubbles.push(
-            <Button
-                style={{
-                    width: '100%'
-                }}
-                key="button"
-                size="giant"
-                appearance="outline"
-                onPress={() => this.props.navigation.push('Scan')}
-            >
-                Export More Kits
-            </Button>
+            <>
+                <Button
+                    style={{
+                        width: '100%',
+                        marginBottom: 5
+                    }}
+                    key="button"
+                    size="giant"
+                    appearance="outline"
+                    onPress={() =>
+                        this.props.navigation.push('Scan', {
+                            action: '',
+                            text: 'Scanning kits arriving at the lab'
+                        })
+                    }
+                >
+                    Process Arriving Kits
+                </Button>
+                <Button
+                    style={{
+                        width: '100%'
+                    }}
+                    key="stuff"
+                    size="giant"
+                    appearance="outline"
+                    onPress={() =>
+                        this.props.navigation.push('Scan', {
+                            action: 'r',
+                            text: 'Scanning kits to record results'
+                        })
+                    }
+                >
+                    Upload Results
+                </Button>
+            </>
         );
 
         return bubbles;
@@ -81,7 +100,7 @@ class LabScreen extends React.Component {
                     }}
                     category="h1"
                 >
-                    Lab Dashboard Whatever
+                    Generic Lab Dashboard
                 </Text>
                 <View
                     style={{

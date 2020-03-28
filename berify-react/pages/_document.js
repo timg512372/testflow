@@ -43,7 +43,7 @@ export default class MyDocument extends Document {
                     />
 
                     <link rel="stylesheet" href="/_next/static/style.css" />
-                    <link rel="icon" type="image/png" href="/static/logo.png?" />
+                    <link rel="icon" type="image/png" href="/static/icon.png" />
                     <link
                         rel="stylesheet"
                         media="screen"
