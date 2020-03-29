@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Tabs, Radio, Button, Select, InputNumber, Modal, Card } from 'antd';
 import * as types from '../redux/types';
 import { Router } from '../routes';
-//comment
+
 class TrackerPage extends Component {
     static async getInitialProps({ store }) {
         store.dispatch({ type: types.CHANGE_PAGE, payload: 'g' });
@@ -19,44 +19,40 @@ class TrackerPage extends Component {
 
     state = {
         quantity: 0,
-        downloadLoading: false,
+        downloadLoading: '',
         batches: []
     };
 
-    downloadFile = async () => {
-        this.setState({ downloadLoading: true });
-        fetch('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example')
-            .then(response => response.blob())
-            .then(blob => {
-                // 2. Create blob link to download
-                const url = window.URL.createObjectURL(new Blob([blob]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', `sample.jpg`);
-                // 3. Append to html page
-                document.body.appendChild(link);
-                // 4. Force download
-                link.click();
-                // 5. Clean up and remove the link
-                link.parentNode.removeChild(link);
-                this.setState({ downloadLoading: false });
-            });
+    downloadFile = async (codes, index) => {
+        this.setState({ downloadLoading: index });
+        codes.forEach(element => {
+            fetch('https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + element)
+                .then(response => response.blob())
+                .then(blob => {
+                    // 2. Create blob link to download
+                    const url = window.URL.createObjectURL(new Blob([blob]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `sample.jpg`);
+                    // 3. Append to html page
+                    document.body.appendChild(link);
+                    // 4. Force download
+                    link.click();
+                    // 5. Clean up and remove the link
+                    link.parentNode.removeChild(link);
+                    this.setState({ downloadLoading: false });
+                });
+        });
     };
 
     renderCards = () => {
-        return this.state.batches.map(batch => {
+        return this.state.batches.map((batch, index) => {
             return (
                 <Card title={batch.date} style={{ width: 300 }}>
                     <h3>{batch.QRs.length} Codes</h3>
                     <Button
-                        download
-                        /*
-                        onClick={() => {
-                            for (let i = 0; i < batch.QRs.length; i++) {
-                                window.open(batch.QRs[i]);
-                            }
-                        }}
-                        */
+                        loading={this.state.downloadLoading === index}
+                        onClick={() => this.downloadFile(batch.QRs)}
                     >
                         Download
                     </Button>
@@ -111,16 +107,6 @@ class TrackerPage extends Component {
                         Submit
                     </Button>
                 </div>
-
-                {/*
-                <Button
-                    onClick={this.downloadFile}
-                    loading={this.state.downloadLoading}
-                    style={{ margin: '20px' }}
-                >
-                    Download Files
-                </Button>
-                */}
                 <h1 style={{ textAlign: 'center', marginTop: '20px' }}>Past QR Code Requests</h1>
                 <div
                     style={{
@@ -142,7 +128,4 @@ const mapStateToProps = state => {
     return { user, isAuthenticated, error };
 };
 
-export default connect(
-    mapStateToProps,
-    null
-)(TrackerPage);
+export default connect(mapStateToProps, null)(TrackerPage);

@@ -2,7 +2,7 @@ import * as types from '../types';
 import { AsyncStorage } from 'react-native';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
-import { SERVER_URL } from 'react-native-dotenv';
+import { SERVER_URL } from '../../dotenv.json';
 
 export const changeUserName = userName => {
     return {

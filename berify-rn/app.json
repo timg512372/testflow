@@ -2,7 +2,7 @@
     "expo": {
         "name": "TestFlow",
         "slug": "testflow-covid19hackathon",
-        "privacy": "unlisted",
+        "privacy": "public",
         "sdkVersion": "36.0.0",
         "platforms": ["ios", "android", "web"],
         "version": "1.0.0",
