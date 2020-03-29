@@ -70,7 +70,7 @@ class HomePage extends Component {
                         }}>
                          TestFlow tracks test inventory on the blockchain, securing your testing results
                          </h1>
-                         <img style= {{}} alt="numberOne" src="/static/numberOne.png" />
+                         <img  alt="numberOne" src="/static/numberOne.png" />
                          <h2>Everytime your testing kit is moved, its QR code will be scanned</h2>
                     </div>
                 </div>
