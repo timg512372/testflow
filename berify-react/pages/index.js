@@ -64,14 +64,59 @@ class HomePage extends Component {
                         width: '100%',
                         textAlign: 'center'
                     }}>
-                        <h1 style={{ 
-                            padding: '5vw',
-                            color: '#0C1752'
+                        <h1 style={{
+                            fontSize: '50px',
+                            color: '#0C1752',
+                            marginBottom: '5vw'
                         }}>
                          TestFlow tracks test inventory on the blockchain, securing your testing results
                          </h1>
-                         <img  alt="numberOne" src="/static/numberOne.png" />
-                         <h2>Everytime your testing kit is moved, its QR code will be scanned</h2>
+                         <div style={{
+                            padding: '5vw'}}>
+                            <img style= {{
+                                width: '10vw', 
+                                height: '10vw', 
+                                float: 'left'}} alt="numberOne" src="/static/numberOne.png"/>
+                            <h2 style={{ 
+                                paddingTop: '1vw',
+                                paddingLeft: '12vw',
+                                fontSize: '30px',
+                                color: '#00648D',
+                                flexWrap: 'wrap',
+                                width: '50vw'
+                            }}>A QR code would be assigned to each testing kit upon factory production</h2>
+                        </div>
+                        <img style= {{width: '12vx', height: '3vw'}} alt="lineBreak" src="/static/lineBreak.png"/>
+                        <div style={{
+                            padding: '5vw'}}>
+                            <img style= {{
+                                width: '10vw', 
+                                height: '10vw', 
+                                float: 'left'}} alt="numberTwo" src="/static/numberTwo.png" />
+                            <h2 style={{
+                                paddingLeft: '12vw',
+                                fontSize: '30px',
+                                color: '#00648D',
+                                flexWrap: 'wrap',
+                                width: '50vw'
+                            }}>Everytime your testing kit is moved, its QR code will be scanned. This prevents your kit from being lost</h2>
+                        </div> 
+                        <img style= {{width: '12vw', height: '3vw'}} alt="lineBreak" src="/static/lineBreak.png"/>
+                        <div style={{
+                            padding: '5vw'}}>
+                            <img style= {{
+                                width: '10vw', 
+                                height: '10vw', 
+                                float: 'left'}} alt="numberThree" src="/static/numberThree.png" />
+                            <h2 style={{ 
+                                paddingTop: '1vw',
+                                paddingLeft: '12vw',
+                                fontSize: '30px',
+                                color: '#00648D',
+                                flexWrap: 'wrap',
+                                width: '50vw'
+                            }}>Enter a confirmation code in order to check the progress of your test</h2>
+                        </div>
                     </div>
                 </div>
                 <div
@@ -155,7 +200,7 @@ class HomePage extends Component {
                             />
                             <input
                                 style={{
-                                    backgroundColor: '#FF8282',
+                                    backgroundColor: '#2D4A98',
                                     color: '#ffffff',
                                     border: 'none',
                                     borderRadius: 4,
