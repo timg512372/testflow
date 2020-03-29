@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Image, View, Text } from 'react-native';
-import { Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
+import { Image, View } from 'react-native';
+import { Input, Button, Toggle, CheckBox, Text } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import {

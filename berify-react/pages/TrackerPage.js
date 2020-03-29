@@ -2,9 +2,20 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ChatBox from '../components/ChatBox';
 import axios from 'axios';
-import { Badge, Popover } from 'antd';
+import { Badge, Popover, Button } from 'antd';
 import * as types from '../redux/types';
 import GoogleMapReact from 'google-map-react';
+import {
+    LineChart,
+    CartesianGrid,
+    Line,
+    Tooltip,
+    Legend,
+    XAxis,
+    YAxis,
+    PieChart,
+    Pie
+} from 'recharts';
 
 class TrackerPage extends Component {
     static async getInitialProps({ store }) {
@@ -16,11 +27,30 @@ class TrackerPage extends Component {
         text: ''
     };
 
+    downloadFile = async () => {
+        fetch('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example')
+            .then(response => response.blob())
+            .then(blob => {
+                // 2. Create blob link to download
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `sample.jpg`);
+                // 3. Append to html page
+                document.body.appendChild(link);
+                // 4. Force download
+                link.click();
+                // 5. Clean up and remove the link
+                link.parentNode.removeChild(link);
+            });
+    };
+
     renderNumbers = () => {
         const data = [
             { text: 'Number Tested', num: 20000 },
             { text: 'Nationwide Stock of Tests', num: 800 },
-            { text: 'Hospitals Facing Shortages', num: 400 }
+            { text: 'Hospitals Facing Shortages', num: 400 },
+            { text: 'In Transit', num: 330 }
         ];
 
         return (
@@ -82,11 +112,11 @@ class TrackerPage extends Component {
                                 lng: -96
                             }}
                             defaultZoom={4}
-                            // yesIWantToUseGoogleMapApiInternals
+                            // yesIWantToUsedGoogleMapApiInternals
                             // onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
                         >
                             <Popover
-                                title={<div style={{ textAlign: 'center' }}>Hoag Irvine</div>}
+                                title={<div style={{ textAlign: 'center' }}>Hoag "Irvine"</div>}
                                 lat={40}
                                 lng={-96}
                                 placement="top"
@@ -116,13 +146,124 @@ class TrackerPage extends Component {
                             flexDirection: 'column'
                         }}
                     >
-                        help
+                        <img
+                            src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=example"
+                            alt="something"
+                        />
+                        <Button onClick={this.downloadFile}>Download File </Button>
+                        <h2> Test Kit Distribution over Time </h2>
+                        <LineChart
+                            width={730}
+                            height={250}
+                            data={data}
+                            margin={{ top: 5, right: 30, left: 20, bottom: 30 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="Produced" stroke="#8884d8" />
+                            <Line type="monotone" dataKey="Used" stroke="#82ca9d" />
+                            <Line type="monotone" dataKey="Processed" stroke="#000000" />
+                        </LineChart>
+
+                        <h2> Testing Center Inventory </h2>
+
+                        <PieChart width={730} height={250}>
+                            <Pie
+                                data={data02}
+                                dataKey="value"
+                                nameKey="name"
+                                cx="50%"
+                                cy="50%"
+                                outerRadius={100}
+                                fill="#8884d8"
+                                label={props => {
+                                    console.log(props);
+                                    return `${props.name}: ${props.value} centers`;
+                                }}
+                                legendType="line"
+                            />
+                        </PieChart>
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+const data02 = [
+    {
+        name: 'None',
+        value: 2400
+    },
+    {
+        name: 'Critically Low',
+        value: 3908
+    },
+    {
+        name: 'Low',
+        value: 4567
+    },
+    {
+        name: 'Adequate',
+        value: 1398
+    },
+    {
+        name: 'Above Average',
+        value: 1398
+    },
+    {
+        name: 'High',
+        value: 9800
+    }
+];
+
+const data = [
+    {
+        name: '3/3/20',
+        Used: 4000,
+        Produced: 2400,
+        Processed: 2400
+    },
+    {
+        name: '3/4/20',
+        Used: 3000,
+        Produced: 1398,
+        Processed: 2210
+    },
+    {
+        name: '3/5/20',
+        Used: 2000,
+        Produced: 9800,
+        Processed: 2290
+    },
+    {
+        name: '3/6/20',
+        Used: 2780,
+        Produced: 3908,
+        Processed: 2000
+    },
+    {
+        name: '3/7/20',
+        Used: 1890,
+        Produced: 4800,
+        Processed: 2181
+    },
+    {
+        name: '3/8/20',
+        Used: 2390,
+        Produced: 3800,
+        Processed: 2500
+    },
+    {
+        name: '3/9/20',
+        Used: 3490,
+        Produced: 4300,
+        Processed: 2100
+    }
+];
 
 const mapStateToProps = state => {
     const { user, isAuthenticated, error } = state.auth;
