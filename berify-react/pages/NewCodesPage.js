@@ -9,12 +9,18 @@ import { Router } from '../routes';
 class TrackerPage extends Component {
     static async getInitialProps({ store }) {
         store.dispatch({ type: types.CHANGE_PAGE, payload: 'g' });
-        console.log('getInitialProps');
     }
 
+    componentDidMount = async () => {
+        axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
+        const { data } = await axios.get(`${process.env.SERVER_URL}/api/test/batches`);
+        this.setState({ batches: data.batches });
+    };
+
     state = {
-        num: '',
-        downloadLoading: false
+        quantity: 0,
+        downloadLoading: false,
+        batches: []
     };
 
     downloadFile = async () => {
@@ -38,17 +44,25 @@ class TrackerPage extends Component {
     };
 
     renderCards = () => {
-        const dummyData = [{ date: 'some date', codes: ['a', 'b', 'c', 'd'] }];
-        return (
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                {dummyData.map(req => (
-                    <Card title={req.date} style={{ width: 300 }}>
-                        <h3>{req.codes.length} Codes</h3>
-                        <Button>Download</Button>
-                    </Card>
-                ))}
-            </div>
-        );
+        return this.state.batches.map(batch => {
+            return (
+                <Card title={batch.date} style={{ width: 300 }}>
+                    <h3>{batch.QRs.length} Codes</h3>
+                    <Button
+                        download
+                        /*
+                        onClick={() => {
+                            for (let i = 0; i < batch.QRs.length; i++) {
+                                window.open(batch.QRs[i]);
+                            }
+                        }}
+                        */
+                    >
+                        Download
+                    </Button>
+                </Card>
+            );
+        });
     };
 
     render() {
@@ -73,14 +87,32 @@ class TrackerPage extends Component {
                     }}
                 >
                     <InputNumber
-                        onChange={num => this.setState({ num })}
+                        onChange={quantity => this.setState({ quantity })}
                         style={{ width: '70vw', margin: '0px 10px 0px 0px' }}
+                        value={this.state.quantity}
                     ></InputNumber>
-                    <Button type="primary" onClick={() => console.log('Clicked File')}>
+                    <Button
+                        type="primary"
+                        onClick={async () => {
+                            axios.defaults.headers.common['Authorization'] = localStorage.getItem(
+                                'jwtToken'
+                            );
+
+                            await axios.post(`${process.env.SERVER_URL}/api/test/new`, {
+                                quantity: this.state.quantity
+                            });
+
+                            const { data } = await axios.get(
+                                `${process.env.SERVER_URL}/api/test/batches`
+                            );
+                            this.setState({ batches: data.batches, quantity: 0 });
+                        }}
+                    >
                         Submit
                     </Button>
                 </div>
 
+                {/*
                 <Button
                     onClick={this.downloadFile}
                     loading={this.state.downloadLoading}
@@ -88,9 +120,18 @@ class TrackerPage extends Component {
                 >
                     Download Files
                 </Button>
-
-                <h1 style={{ textAlign: 'center' }}>Past QR Code Requests</h1>
-                {this.renderCards()}
+                */}
+                <h1 style={{ textAlign: 'center', marginTop: '20px' }}>Past QR Code Requests</h1>
+                <div
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap'
+                    }}
+                >
+                    {this.renderCards()}
+                </div>
             </div>
         );
     }
@@ -101,4 +142,7 @@ const mapStateToProps = state => {
     return { user, isAuthenticated, error };
 };
 
-export default connect(mapStateToProps, null)(TrackerPage);
+export default connect(
+    mapStateToProps,
+    null
+)(TrackerPage);
