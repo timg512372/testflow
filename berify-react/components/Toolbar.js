@@ -19,6 +19,7 @@ const MUST_LOG_IN = [''];
 
 class Toolbar extends Component {
     componentDidMount() {
+        console.log(this.props.user);
         if (!this.props.isAuthenticated && MUST_LOG_IN.includes(this.props.page)) {
             Router.push('/notloggedin');
         }
@@ -122,19 +123,22 @@ class Toolbar extends Component {
                                     flexDirection: 'row'
                                 }}
                             >
-                                {this.renderLink(
-                                    'Test Kit Tracker',
-                                    't',
-                                    <DashboardOutlined />,
-                                    '/tracker'
-                                )}
-
-                                {this.renderLink(
-                                    'Verify Manufacturers',
-                                    'v',
-                                    <CheckCircleOutlined />,
-                                    '/verify'
-                                )}
+                                {this.props.user.role == 'fda' ? (
+                                    <>
+                                        {this.renderLink(
+                                            'Test Kit Tracker',
+                                            't',
+                                            <DashboardOutlined />,
+                                            '/tracker'
+                                        )}
+                                        {this.renderLink(
+                                            'Verify Manufacturers',
+                                            'v',
+                                            <CheckCircleOutlined />,
+                                            '/verify'
+                                        )}
+                                    </>
+                                ) : null}
 
                                 {this.renderLink(
                                     'Test Results',
@@ -143,12 +147,14 @@ class Toolbar extends Component {
                                     '/results'
                                 )}
 
-                                {this.renderLink(
-                                    'Generate New Codes',
-                                    'g',
-                                    <QrcodeOutlined />,
-                                    '/newcode'
-                                )}
+                                {this.props.user.role === 'factory'
+                                    ? this.renderLink(
+                                          'Generate New Codes',
+                                          'g',
+                                          <QrcodeOutlined />,
+                                          '/newcode'
+                                      )
+                                    : null}
 
                                 {this.renderLink('FAQ', 'q', <QuestionCircleOutlined />, '/faq')}
 

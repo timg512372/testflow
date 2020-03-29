@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ChatBox from '../components/ChatBox';
 import axios from 'axios';
-import { Tabs, Radio, Button, Select, InputNumber, Modal } from 'antd';
+import { Tabs, Radio, Button, Select, InputNumber, Modal, Card } from 'antd';
 import * as types from '../redux/types';
 import { Router } from '../routes';
 //comment
@@ -35,6 +35,20 @@ class TrackerPage extends Component {
                 link.parentNode.removeChild(link);
                 this.setState({ downloadLoading: false });
             });
+    };
+
+    renderCards = () => {
+        const dummyData = [{ date: 'some date', codes: ['a', 'b', 'c', 'd'] }];
+        return (
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                {dummyData.map(req => (
+                    <Card title={req.date} style={{ width: 300 }}>
+                        <h3>{req.codes.length} Codes</h3>
+                        <Button>Download</Button>
+                    </Card>
+                ))}
+            </div>
+        );
     };
 
     render() {
@@ -74,6 +88,9 @@ class TrackerPage extends Component {
                 >
                     Download Files
                 </Button>
+
+                <h1 style={{ textAlign: 'center' }}>Past QR Code Requests</h1>
+                {this.renderCards()}
             </div>
         );
     }

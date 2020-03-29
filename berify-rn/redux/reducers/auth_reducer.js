@@ -11,7 +11,8 @@ const INITIAL_STATE = {
     isAuthenticated: false,
     lUserName: '',
     lPassword: '',
-    error: ''
+    error: '',
+    page: ''
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -61,6 +62,10 @@ export default function(state = INITIAL_STATE, action) {
 
         case types.GET_ERRORS: {
             return { ...state, error: action.payload };
+        }
+
+        case types.CHANGE_PAGE: {
+            return { ...state, page: action.payload };
         }
 
         default:
