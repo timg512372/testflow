@@ -5,7 +5,14 @@ import { connect } from 'react-redux';
 import { Popover, Icon } from 'antd';
 import UserInfo from './UserInfo';
 import axios from 'axios';
-import { QuestionCircleOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons';
+import {
+    QuestionCircleOutlined,
+    DashboardOutlined,
+    UserOutlined,
+    CheckCircleOutlined,
+    QrcodeOutlined,
+    ProjectOutlined
+} from '@ant-design/icons';
 import '../styles.less';
 
 const MUST_LOG_IN = [''];
@@ -123,16 +130,23 @@ class Toolbar extends Component {
                                 )}
 
                                 {this.renderLink(
+                                    'Verify Manufacturers',
+                                    'v',
+                                    <CheckCircleOutlined />,
+                                    '/verify'
+                                )}
+
+                                {this.renderLink(
                                     'Test Results',
                                     'r',
-                                    <QuestionCircleOutlined />,
+                                    <ProjectOutlined />,
                                     '/results'
                                 )}
 
                                 {this.renderLink(
                                     'Generate New Codes',
                                     'g',
-                                    <QuestionCircleOutlined />,
+                                    <QrcodeOutlined />,
                                     '/newcode'
                                 )}
 

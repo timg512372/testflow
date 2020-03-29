@@ -1,7 +1,7 @@
 {
     "name": "create-next-example-app",
     "scripts": {
-        "dev": "NODE_ENV=development node server.js",
+        "dev": "node server.js",
         "build": "./node_modules/next/dist/bin/next build",
         "start": " NODE_ENV=production node server.js -p $PORT"
     },

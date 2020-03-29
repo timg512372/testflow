@@ -79,7 +79,7 @@ class LoginScreen extends React.Component {
                             <Button
                                 size="small"
                                 appearance="ghost"
-                                onPress={() => this.props.navigation.push('SignUp')}
+                                onPress={() => this.props.navigation.push('NewInstitution')}
                             >
                                 Create an Account
                             </Button>

@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ChatBox from '../components/ChatBox';
 import axios from 'axios';
-import { Tabs, Radio, Button, Select, Input, Modal } from 'antd';
+import { Badge, Popover } from 'antd';
 import * as types from '../redux/types';
-import { Router } from '../routes';
 import GoogleMapReact from 'google-map-react';
 
 class TrackerPage extends Component {
@@ -86,13 +85,26 @@ class TrackerPage extends Component {
                             // yesIWantToUseGoogleMapApiInternals
                             // onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
                         >
-                            <div
+                            <Popover
+                                title={<div style={{ textAlign: 'center' }}>Hoag Irvine</div>}
                                 lat={40}
                                 lng={-96}
-                                style={{ fontSize: '400%', fontFamily: 'Lato' }}
+                                placement="top"
+                                content={
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            flexDirection: 'column'
+                                        }}
+                                    >
+                                        <h5> Inventory: 400 Tests </h5>
+                                        <h5> Shipped: 200 Tests </h5>
+                                    </div>
+                                }
                             >
-                                Some Textg
-                            </div>
+                                <Badge count={400} overflowCount={1000000} color="blue" />
+                            </Popover>
                         </GoogleMapReact>
                     </div>
 

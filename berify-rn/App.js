@@ -18,7 +18,6 @@ import { store } from './redux/store';
 import LandingScreen from './screens/LandingScreen';
 import LoginScreen from './screens/LoginScreen';
 import ScanScreen from './screens/ScanScreen';
-import SignUpScreen from './screens/SignUpScreen';
 import NewInstitutionScreen from './screens/NewInstitutionScreen';
 import FactoryStatScreen from './screens/FactoryStatScreen';
 import HospitalScreen from './screens/HospitalScreen';
@@ -58,7 +57,6 @@ class App extends React.Component {
             <>
                 <Stack.Screen name="Landing" component={LandingScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="SignUp" component={SignUpScreen} />
                 <Stack.Screen name="NewInstitution" component={NewInstitutionScreen} />
             </>
         );

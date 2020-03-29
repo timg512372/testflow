@@ -6,4 +6,5 @@ module.exports = routes()
     .add('/faq', 'FAQPage')
     .add('/results', 'ResultPage')
     .add('/newcode', 'NewCodesPage')
+    .add('/verify', 'VerifyPage')
     .add('/inks', 'InksPage');

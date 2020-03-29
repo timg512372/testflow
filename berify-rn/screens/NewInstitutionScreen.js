@@ -17,7 +17,10 @@ class NewInstitutionScreen extends React.Component {
         type: '',
         code: '',
         error: '',
-        location: ''
+        location: '',
+        username: '',
+        password: '',
+        pconfirm: ''
     };
 
     render() {
@@ -41,7 +44,7 @@ class NewInstitutionScreen extends React.Component {
                     <View
                         style={{
                             width: vw(80),
-                            height: vh(60),
+                            height: vh(80),
                             backgroundColor: 'white',
                             borderRadius: vw(4)
                         }}
@@ -59,13 +62,27 @@ class NewInstitutionScreen extends React.Component {
                             onChangeText={val => this.setState({ name: val })}
                             style={{ margin: 10, borderRadius: 8 }}
                         />
-
                         <Input
-                            placeholder="Insitution Code"
-                            value={this.state.code}
-                            onChangeText={val => this.setState({ code: val })}
-                            style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
+                            placeholder="Username"
+                            value={this.state.password}
+                            onChangeText={val => this.setState({ username: val })}
+                            style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                         />
+                        <Input
+                            placeholder="Password"
+                            value={this.state.password}
+                            onChangeText={val => this.setState({ password: val })}
+                            style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
+                            secureTextEntry={true}
+                        />
+                        <Input
+                            placeholder="Confirm Password"
+                            value={this.state.pconfirm}
+                            onChangeText={val => this.setState({ pconfirm: val })}
+                            style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
+                            secureTextEntry={true}
+                        />
+
                         <Select
                             data={[
                                 { text: 'Producer' },
