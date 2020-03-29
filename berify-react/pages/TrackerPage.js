@@ -54,6 +54,17 @@ class TrackerPage extends Component {
         );
     };
 
+    componentDidMount = async () => {
+        let { data } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+            params: {
+                address: 'Mountain View, CA',
+                key: process.env.GOOGLE_MAPS_API_KEY
+            }
+        });
+
+        console.log(data);
+    };
+
     handleApiLoaded = (map, maps) => {
         let marker = maps.Marker({
             position: {

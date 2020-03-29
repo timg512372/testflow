@@ -20,12 +20,13 @@ class TrackerPage extends Component {
     state = {
         quantity: 0,
         downloadLoading: '',
-        batches: []
+        batches: [],
+        loading: ''
     };
 
     downloadFile = async (codes, index) => {
         this.setState({ downloadLoading: index });
-        codes.forEach(element => {
+        await codes.forEach((element, index) => {
             fetch('https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + element)
                 .then(response => response.blob())
                 .then(blob => {
@@ -33,14 +34,14 @@ class TrackerPage extends Component {
                     const url = window.URL.createObjectURL(new Blob([blob]));
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', `sample.jpg`);
+                    link.setAttribute('download', `sample${index}.jpg`);
                     // 3. Append to html page
                     document.body.appendChild(link);
                     // 4. Force download
                     link.click();
                     // 5. Clean up and remove the link
                     link.parentNode.removeChild(link);
-                    this.setState({ downloadLoading: false });
+                    this.setState({ downloadLoading: '' });
                 });
         });
     };
@@ -52,7 +53,7 @@ class TrackerPage extends Component {
                     <h3>{batch.QRs.length} Codes</h3>
                     <Button
                         loading={this.state.downloadLoading === index}
-                        onClick={() => this.downloadFile(batch.QRs)}
+                        onClick={() => this.downloadFile(batch.QRs, index)}
                     >
                         Download
                     </Button>
@@ -89,7 +90,9 @@ class TrackerPage extends Component {
                     ></InputNumber>
                     <Button
                         type="primary"
+                        loading={this.state.loading}
                         onClick={async () => {
+                            this.setState({ loading: true });
                             axios.defaults.headers.common['Authorization'] = localStorage.getItem(
                                 'jwtToken'
                             );
@@ -101,7 +104,7 @@ class TrackerPage extends Component {
                             const { data } = await axios.get(
                                 `${process.env.SERVER_URL}/api/test/batches`
                             );
-                            this.setState({ batches: data.batches, quantity: 0 });
+                            this.setState({ batches: data.batches, quantity: 0, loading: false });
                         }}
                     >
                         Submit

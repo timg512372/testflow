@@ -14,13 +14,48 @@ class VerifyPage extends Component {
     }
 
     state = {
-        text: ''
+        text: '',
+        loaded: false
     };
+
+    locationData = {};
+
+    async componentDidMount() {
+        let noLocationData = dummyData.no.map(async factory => {
+            let { data } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                params: {
+                    address: factory.location,
+                    key: process.env.GOOGLE_MAPS_API_KEY
+                }
+            });
+            if (data.results[0]) {
+                return data.results[0].geometry.location;
+            } else return { lat: 0, lng: 0 };
+        });
+
+        let yesLocationData = dummyData.yes.map(async factory => {
+            let { data } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                params: {
+                    address: factory.location,
+                    key: process.env.GOOGLE_MAPS_API_KEY
+                }
+            });
+            if (data.results[0]) {
+                return data.results[0].geometry.location;
+            } else return { lat: 0, lng: 0 };
+        });
+
+        this.locationData.no = await Promise.all(noLocationData);
+        this.locationData.yes = await Promise.all(yesLocationData);
+
+        this.setState({ loaded: true });
+        console.log(this.locationData);
+    }
 
     renderCards = (factories, verified) => {
         return (
             <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row' }}>
-                {factories.map(factory => (
+                {factories.map((factory, index) => (
                     <Card
                         style={{
                             width: '20vw',
@@ -59,23 +94,29 @@ class VerifyPage extends Component {
                                 height: '11vw'
                             }}
                         >
-                            <GoogleMapReact
-                                bootstrapURLKeys={{ key: process.env.GOOGLE_MAPS_API_KEY }}
-                                defaultCenter={factory.location}
-                                defaultZoom={6}
-                            >
-                                <Badge
-                                    lat={factory.location.lat}
-                                    lng={factory.location.lng}
-                                    count={
-                                        <DownCircleFilled
-                                            style={{
-                                                color: '#425eac'
-                                            }}
-                                        />
+                            {this.state.loaded ? (
+                                <GoogleMapReact
+                                    bootstrapURLKeys={{ key: process.env.GOOGLE_MAPS_API_KEY }}
+                                    defaultCenter={
+                                        this.locationData[verified ? 'yes' : 'no'][index]
                                     }
-                                />
-                            </GoogleMapReact>
+                                    defaultZoom={6}
+                                >
+                                    <Badge
+                                        lat={this.locationData[verified ? 'yes' : 'no'][index].lat}
+                                        lng={this.locationData[verified ? 'yes' : 'no'][index].lng}
+                                        count={
+                                            <DownCircleFilled
+                                                style={{
+                                                    color: '#425eac'
+                                                }}
+                                            />
+                                        }
+                                    />
+                                </GoogleMapReact>
+                            ) : (
+                                'Loading Map...'
+                            )}
                         </div>
                     </Card>
                 ))}
@@ -84,53 +125,6 @@ class VerifyPage extends Component {
     };
 
     render() {
-        const dummyData = {
-            no: [
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                },
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                },
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                },
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                },
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                },
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                },
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                },
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                },
-                {
-                    name: 'Bad Factory',
-                    location: { lat: 40, lng: -100 }
-                }
-            ],
-            yes: [
-                {
-                    name: 'Good Factory',
-                    location: { lat: 40, lng: -100 }
-                }
-            ]
-        };
-
         return (
             <div
                 style={{
@@ -178,6 +172,41 @@ class VerifyPage extends Component {
         );
     }
 }
+
+const dummyData = {
+    no: [
+        {
+            name: 'Bad Factory',
+            location: 'Baltimore, MD'
+        },
+        {
+            name: 'Bad Factory',
+            location: 'Washington, DC'
+        },
+        {
+            name: 'Bad Factory',
+            location: 'Irvine, CA'
+        },
+        {
+            name: 'Bad Factory',
+            location: 'New York, NY'
+        },
+        {
+            name: 'Bad Factory',
+            location: 'Seattle, WA'
+        },
+        {
+            name: 'Bad Factory',
+            location: 'Chicago, IL'
+        }
+    ],
+    yes: [
+        {
+            name: 'Good Factory',
+            location: 'San Francisco, CA'
+        }
+    ]
+};
 
 const mapStateToProps = state => {
     const { user, isAuthenticated, error } = state.auth;
