@@ -136,7 +136,7 @@ class HospitalScreen extends React.Component {
                     }}
                     category="h1"
                 >
-                    Hoag Irvine Dashboard
+                    {this.props.auth.user.institution} Dashboard
                 </Text>
                 <View
                     style={{
@@ -154,7 +154,8 @@ class HospitalScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return {};
+    const { auth } = state;
+    return { auth };
 };
 
 export default connect(mapStateToProps, { logoutUser })(HospitalScreen);

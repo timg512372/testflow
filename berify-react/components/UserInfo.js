@@ -83,6 +83,13 @@ class PlayerInfo extends Component {
                         </h3>
                     ) : null}
                 </div>
+                <hr style={{ margin: '10px 0 10px 0' }} />
+                <Button
+                    style={{ margin: '0px 20px 0 20px' }}
+                    onClick={() => Router.push('/register')}
+                >
+                    Register
+                </Button>
             </div>
         );
     }

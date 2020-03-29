@@ -2,6 +2,7 @@ import * as types from '../types';
 import { AsyncStorage } from 'react-native';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
+import { SERVER_URL } from 'react-native-dotenv';
 
 export const changeUserName = userName => {
     return {
@@ -68,12 +69,13 @@ export const handleRegister = (
     location,
     navigation
 ) => async dispatch => {
+    console.log(SERVER_URL);
     try {
         console.log(institution, userName, password, password_confirm, role, location);
 
         const res = await axios({
             method: 'post',
-            url: 'https://c92da37d.ngrok.io/api/auth/register',
+            url: `${SERVER_URL}/api/auth/register`,
             data: { institution, userName, password, password_confirm, role, location }
         });
 
@@ -103,7 +105,7 @@ export const handleLogin = (userName, password, navigation) => async dispatch =>
     try {
         const res = await axios({
             method: 'post',
-            url: 'https://c92da37d.ngrok.io/api/auth/login',
+            url: `${SERVER_URL}/api/auth/login`,
             data: { userName, password }
         });
 

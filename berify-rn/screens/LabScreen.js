@@ -59,7 +59,8 @@ class LabScreen extends React.Component {
                 </Button>
                 <Button
                     style={{
-                        width: '100%'
+                        width: '100%',
+                        marginBottom: 5
                     }}
                     key="stuff"
                     size="giant"
@@ -75,8 +76,7 @@ class LabScreen extends React.Component {
                 </Button>
                 <Button
                     style={{
-                        width: '100%',
-                        marginBottom: 10
+                        width: '100%'
                     }}
                     key="logout"
                     size="giant"
@@ -93,6 +93,7 @@ class LabScreen extends React.Component {
     };
 
     render() {
+        console.log(this.props.auth);
         return (
             <View
                 style={{
@@ -114,7 +115,7 @@ class LabScreen extends React.Component {
                     }}
                     category="h1"
                 >
-                    Generic Lab Dashboard
+                    {this.props.auth.user.institution} Dashboard
                 </Text>
                 <View
                     style={{
@@ -132,7 +133,8 @@ class LabScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return {};
+    const { auth } = state;
+    return { auth };
 };
 
 export default connect(mapStateToProps, { logoutUser })(LabScreen);

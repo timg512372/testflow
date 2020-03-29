@@ -47,7 +47,8 @@ class FactoryStatScreen extends React.Component {
             <>
                 <Button
                     style={{
-                        width: '100%'
+                        width: '100%',
+                        marginBottom: 10
                     }}
                     key="button"
                     size="giant"
@@ -63,10 +64,9 @@ class FactoryStatScreen extends React.Component {
                 </Button>
                 <Button
                     style={{
-                        width: '100%',
-                        marginBottom: 10
+                        width: '100%'
                     }}
-                    key="logout"
+                    key="something"
                     size="giant"
                     appearance="outline"
                     status="danger"
@@ -81,6 +81,8 @@ class FactoryStatScreen extends React.Component {
     };
 
     render() {
+        console.log(this.props.auth);
+
         return (
             <View
                 style={{
@@ -102,7 +104,7 @@ class FactoryStatScreen extends React.Component {
                     }}
                     category="h1"
                 >
-                    Past Exports
+                    {this.props.auth.user.institution} Dashboard
                 </Text>
                 <View
                     style={{
@@ -120,7 +122,8 @@ class FactoryStatScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return {};
+    const { auth } = state;
+    return { auth };
 };
 
 export default connect(mapStateToProps, { logoutUser })(FactoryStatScreen);
