@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const User = new mongoose.Schema({
-  email: {
+  institution: {
+    type: String,
+    required: true
+  },
+  userName: {
     type: String,
     required: true,
     unique: true
@@ -16,6 +20,10 @@ const User = new mongoose.Schema({
     required: true
   },
   role: {
+    type: String,
+    required: true
+  },
+  location: {
     type: String,
     required: true
   },

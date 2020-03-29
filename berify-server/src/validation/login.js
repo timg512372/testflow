@@ -3,15 +3,11 @@ const isEmpty = require("./empty");
 
 module.exports = function validateLoginInput(data) {
   let errors = {};
-  data.email = !isEmpty(data.email) ? data.email : "";
+  data.userName = !isEmpty(data.userName) ? data.userName : "";
   data.password = !isEmpty(data.password) ? data.password : "";
 
-  if (!Validator.isEmail(data.email)) {
-    errors.email = "Email must be a real address";
-  }
-
-  if (Validator.isEmpty(data.email)) {
-    errors.email = "Email is required";
+  if (Validator.isEmpty(data.userName)) {
+    errors.userName = "Username is required";
   }
 
   if (!Validator.isLength(data.password, { min: 6, max: 30 })) {

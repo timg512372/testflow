@@ -3,18 +3,14 @@ const isEmpty = require("./empty");
 
 module.exports = function validateRegisterInput(data) {
   let errors = {};
-  data.email = !isEmpty(data.email) ? data.email : "";
+  data.userName = !isEmpty(data.userName) ? data.userName : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.password_confirm = !isEmpty(data.password_confirm)
     ? data.password_confirm
     : "";
 
-  if (!Validator.isEmail(data.email)) {
-    errors.email = "Email must be a real address";
-  }
-
-  if (Validator.isEmpty(data.email)) {
-    errors.email = "Email field is required";
+  if (Validator.isEmpty(data.userName)) {
+    errors.userName = "Username field is required";
   }
 
   if (!Validator.isLength(data.password, { min: 6, max: 30 })) {

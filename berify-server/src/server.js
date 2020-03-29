@@ -6,6 +6,7 @@ const cors = require("cors");
 const http = require("http");
 const passport = require("passport");
 const authRouter = require("./routes/authRouter");
+const testRouter = require("./routes/testRouter");
 const mongoose = require("mongoose");
 require("./passport")(passport);
 const { MONGOOSE } = process.env;
@@ -24,6 +25,7 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/auth/", authRouter);
+app.use("/api/test/", testRouter);
 app.use(passport.initialize());
 
 app.get("/", (req, res) => {
