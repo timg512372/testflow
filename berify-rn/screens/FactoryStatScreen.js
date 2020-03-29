@@ -7,6 +7,7 @@ import {
 import { connect } from 'react-redux';
 import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
 
+import { logoutUser } from '../redux/actions';
 import { TOP } from '../assets/images';
 
 class FactoryStatScreen extends React.Component {
@@ -43,22 +44,37 @@ class FactoryStatScreen extends React.Component {
         });
 
         bubbles.push(
-            <Button
-                style={{
-                    width: '100%'
-                }}
-                key="button"
-                size="giant"
-                appearance="outline"
-                onPress={() =>
-                    this.props.navigation.push('Scan', {
-                        action: 'f',
-                        text: 'Scanning Boxes Leaving Factory'
-                    })
-                }
-            >
-                Export More Kits
-            </Button>
+            <>
+                <Button
+                    style={{
+                        width: '100%'
+                    }}
+                    key="button"
+                    size="giant"
+                    appearance="outline"
+                    onPress={() =>
+                        this.props.navigation.push('Scan', {
+                            action: 'f',
+                            text: 'Scanning Boxes Leaving Factory'
+                        })
+                    }
+                >
+                    Export More Kits
+                </Button>
+                <Button
+                    style={{
+                        width: '100%',
+                        marginBottom: 10
+                    }}
+                    key="logout"
+                    size="giant"
+                    appearance="outline"
+                    status="danger"
+                    onPress={() => this.props.logoutUser(this.props.navigation)}
+                >
+                    Log Out
+                </Button>
+            </>
         );
 
         return bubbles;
@@ -107,4 +123,4 @@ const mapStateToProps = state => {
     return {};
 };
 
-export default connect(mapStateToProps)(FactoryStatScreen);
+export default connect(mapStateToProps, { logoutUser })(FactoryStatScreen);

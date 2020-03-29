@@ -10,7 +10,8 @@ const INITIAL_STATE = {
     user: {},
     isAuthenticated: false,
     lUserName: '',
-    lPassword: ''
+    lPassword: '',
+    error: ''
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -56,6 +57,10 @@ export default function(state = INITIAL_STATE, action) {
                 ...state,
                 lPassword: action.payload
             };
+        }
+
+        case types.GET_ERRORS: {
+            return { ...state, error: action.payload };
         }
 
         default:

@@ -7,3 +7,4 @@ export const CHANGE_ROLE = 'change-role';
 export const SET_CURRENT_USER = 'set-current-user';
 export const CHANGE_L_USER_NAME = 'change-l-user-name';
 export const CHANGE_L_PASSWORD = 'change-l-password';
+export const GET_ERRORS = 'get-l-errors';

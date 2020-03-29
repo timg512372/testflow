@@ -7,6 +7,7 @@ import {
 import { connect } from 'react-redux';
 import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
 
+import { logoutUser } from '../redux/actions';
 import { TOP } from '../assets/images';
 
 class HospitalScreen extends React.Component {
@@ -96,6 +97,19 @@ class HospitalScreen extends React.Component {
                 >
                     Send Kits To Lab
                 </Button>
+                <Button
+                    style={{
+                        width: '100%',
+                        marginBottom: 10
+                    }}
+                    key="logout"
+                    size="giant"
+                    appearance="outline"
+                    status="danger"
+                    onPress={() => this.props.logoutUser(this.props.navigation)}
+                >
+                    Log Out
+                </Button>
             </>
         );
     };
@@ -143,4 +157,4 @@ const mapStateToProps = state => {
     return {};
 };
 
-export default connect(mapStateToProps)(HospitalScreen);
+export default connect(mapStateToProps, { logoutUser })(HospitalScreen);

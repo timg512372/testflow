@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { Text, Input, Button, Select } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,12 +20,14 @@ import {
 class NewInstitutionScreen extends React.Component {
     render() {
         return (
-            <View
+            <KeyboardAvoidingView
                 style={{
                     flex: 1,
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}
+                behavior="padding"
+                enabled
             >
                 <LinearGradient
                     colors={['#617DCC', '#2F4B98']}
@@ -87,9 +89,16 @@ class NewInstitutionScreen extends React.Component {
                         />
 
                         <Select
-                            data={[{ text: 'factory' }, { text: 'hospital' }, { text: 'lab' }]}
-                            selectedOption={this.props.auth.role}
-                            onSelect={val => this.props.changeRole(val)}
+                            data={[{ text: 'Factory' }, { text: 'Hospital' }, { text: 'Lab' }]}
+                            selectedOption={{
+                                text: this.props.auth.role
+                                    ? this.props.auth.role.text.charAt(0).toUpperCase() +
+                                      this.props.auth.role.text.slice(1)
+                                    : ''
+                            }}
+                            onSelect={val =>
+                                this.props.changeRole({ text: val.text.toLowerCase() })
+                            }
                             style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
                         />
 
@@ -125,9 +134,12 @@ class NewInstitutionScreen extends React.Component {
                                 Back
                             </Button>
                         </View>
+                        {/* <Text status="danger" style={{ textAlign: 'center', marginTop: 5 }}>
+                            Error: {this.props.auth.error}
+                        </Text> */}
                     </View>
                 </LinearGradient>
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -137,15 +149,12 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(
-    mapStateToProps,
-    {
-        changeUserName,
-        changeInstitution,
-        changePassword,
-        changePasswordConfirm,
-        changeLocation,
-        changeRole,
-        handleRegister
-    }
-)(NewInstitutionScreen);
+export default connect(mapStateToProps, {
+    changeUserName,
+    changeInstitution,
+    changePassword,
+    changePasswordConfirm,
+    changeLocation,
+    changeRole,
+    handleRegister
+})(NewInstitutionScreen);

@@ -7,6 +7,7 @@ import {
 import { connect } from 'react-redux';
 import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
 
+import { logoutUser } from '../redux/actions';
 import { TOP } from '../assets/images';
 
 class LabScreen extends React.Component {
@@ -72,6 +73,19 @@ class LabScreen extends React.Component {
                 >
                     Upload Results
                 </Button>
+                <Button
+                    style={{
+                        width: '100%',
+                        marginBottom: 10
+                    }}
+                    key="logout"
+                    size="giant"
+                    appearance="outline"
+                    status="danger"
+                    onPress={() => this.props.logoutUser(this.props.navigation)}
+                >
+                    Log Out
+                </Button>
             </>
         );
 
@@ -121,4 +135,4 @@ const mapStateToProps = state => {
     return {};
 };
 
-export default connect(mapStateToProps)(LabScreen);
+export default connect(mapStateToProps, { logoutUser })(LabScreen);

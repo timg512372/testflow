@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
-import { Input, Button, Toggle, CheckBox, Text } from '@ui-kitten/components';
+import { View } from 'react-native';
+import { Input, Button, Text } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh
 } from 'react-native-responsive-screen';
-import axios from 'axios';
 import { handleLogin, changeLUserName, changeLPassword } from '../redux/actions';
 
 class LoginScreen extends React.Component {
@@ -77,7 +76,19 @@ class LoginScreen extends React.Component {
                             >
                                 Continue
                             </Button>
+                            <Button
+                                size="small"
+                                appearance="ghost"
+                                onPress={() => this.props.navigation.goBack()}
+                            >
+                                Back
+                            </Button>
                         </View>
+                        {this.props.auth.error ? (
+                            <Text status="danger" style={{ textAlign: 'center', marginTop: 5 }}>
+                                Error: {this.props.auth.error}
+                            </Text>
+                        ) : null}
                     </View>
                 </LinearGradient>
             </View>
@@ -90,7 +101,6 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(
-    mapStateToProps,
-    { handleLogin, changeLUserName, changeLPassword }
-)(LoginScreen);
+export default connect(mapStateToProps, { handleLogin, changeLUserName, changeLPassword })(
+    LoginScreen
+);

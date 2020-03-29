@@ -95,6 +95,7 @@ export const handleRegister = (
         }
     } catch (e) {
         console.log(e);
+        dispatch(setError(e.message));
     }
 };
 
@@ -124,7 +125,15 @@ export const handleLogin = (userName, password, navigation) => async dispatch =>
         }
     } catch (e) {
         console.log(e);
+        dispatch(setError(e.message));
     }
+};
+
+export const setError = error => {
+    return {
+        type: types.GET_ERRORS,
+        payload: error
+    };
 };
 
 export const setCurrentUser = decoded => {
@@ -134,7 +143,9 @@ export const setCurrentUser = decoded => {
     };
 };
 
-export const logoutUser = () => async dispatch => {
+export const logoutUser = navigation => async dispatch => {
+    console.log('logging out user');
     await AsyncStorage.removeItem('jwtToken');
+    navigation.navigate('Landing');
     dispatch(setCurrentUser({}));
 };
