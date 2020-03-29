@@ -70,7 +70,7 @@ class HomePage extends Component {
                             marginBottom: '5vw',
                             paddingTop: '5vw'
                         }}>
-                         TestFlow tracks test inventory on the blockchain, securing your testing results
+                         TestFlow tracks test inventory on the blockchain, securing your testing results.
                          </h1>
 
                         {/*Detail 1*/}
@@ -88,7 +88,7 @@ class HomePage extends Component {
                                 fontSize: '30px',
                                 color: '#00648D',
                                 width: '50vw'
-                            }}>A QR code would be assigned to each testing kit upon factory production</h2>
+                            }}>A QR code would be assigned to each testing kit upon factory production.</h2>
                             <img style= {{
                                 width: '20vw', 
                                 height: '10vw',
@@ -111,7 +111,7 @@ class HomePage extends Component {
                                 fontSize: '30px',
                                 color: '#00648D',
                                 width: '50vw'
-                            }}>Everytime your testing kit is moved, its QR code will be scanned. This prevents your kit from being lost</h2>
+                            }}>Everytime your testing kit is moved, its QR code will be scanned. This prevents your kit from being lost.</h2>
                             <img style= {{
                                 width: '20vw', 
                                 height: '15vw',
@@ -133,7 +133,7 @@ class HomePage extends Component {
                                 fontSize: '30px',
                                 color: '#00648D',
                                 width: '50vw'
-                            }}>Enter a confirmation code in order to check the progress of your test</h2>
+                            }}>Enter a confirmation code in order to check the progress of your test.</h2>
                             <img style= {{
                                 width: '20vw', 
                                 height: '13vw',
