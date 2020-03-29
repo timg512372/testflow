@@ -19,11 +19,9 @@ class TrackerPage extends Component {
     render() {
         return (
             <div style={{ width: '90vw', margin: '3vw' }}>
-                <h2>New QR Code Page (Ryan)</h2>
-                <h2>
-                    Need to be able to enter a number of qr codes that a factory wants and press a
-                    button to submit{' '}
-                </h2>
+                <h2>Please Input the Number of QR Codes Required</h2>
+                    <Input type="basicusage" style={{width: '90%', margin: '0px 10px 0px 0px'}}></Input>
+                    <Button type="primary">Submit</Button>
             </div>
         );
     }
