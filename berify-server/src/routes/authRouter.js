@@ -88,7 +88,8 @@ router.post("/register", async (req, res) => {
     role: req.body.role,
     location: req.body.location,
     address,
-    privateKey
+    privateKey,
+    date: Date.now()
   });
 
   const salt = await bcrypt.genSalt(10);
@@ -104,7 +105,8 @@ router.post("/register", async (req, res) => {
     role: newUser.role,
     location: newUser.location,
     date: newUser.date,
-    address: newUser.address
+    address: newUser.address,
+    date: newUser.date
   };
 
   const token = await jwt.sign(payload, SECRET, {

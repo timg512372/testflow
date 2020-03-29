@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Batch = new mongoose.Schema({
+const Export = new mongoose.Schema({
   factoryId: {
     type: String,
     required: true
@@ -19,5 +19,5 @@ const Batch = new mongoose.Schema({
   }
 });
 
-const BatchModel = mongoose.model("Batch", Batch);
-module.exports = BatchModel;
+const ExportModel = mongoose.model("Export", Export);
+module.exports = ExportModel;

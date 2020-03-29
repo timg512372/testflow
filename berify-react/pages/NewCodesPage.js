@@ -15,6 +15,8 @@ class TrackerPage extends Component {
         axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
         const { data } = await axios.get(`${process.env.SERVER_URL}/api/test/batches`);
         this.setState({ batches: data.batches });
+
+        console.log(data.batches);
     };
 
     state = {
@@ -128,4 +130,7 @@ const mapStateToProps = state => {
     return { user, isAuthenticated, error };
 };
 
-export default connect(mapStateToProps, null)(TrackerPage);
+export default connect(
+    mapStateToProps,
+    null
+)(TrackerPage);
