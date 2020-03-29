@@ -21,7 +21,7 @@
         "next": "^9.2.2",
         "next-redux-wrapper": "^2.1.0",
         "next-routes": "^1.4.2",
-        "next-seo": "^2.2.0",
+        "next-seo": "^4.4.0",
         "null-loader": "^3.0.0",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",

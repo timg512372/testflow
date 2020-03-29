@@ -6329,10 +6329,10 @@ next-routes@^1.4.2:
   dependencies:
     path-to-regexp "^2.1.0"
 
-next-seo@^2.2.0:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/next-seo/-/next-seo-2.2.1.tgz#c531fb0a4b079ba50983ee15b0f224568f44a474"
-  integrity sha512-q7mz7Jbm+7EFV9FSwDKFj6VKhHNIt13l9wTn7tKSzhwaTP3CAuMciQzyNY5WVEk+I0QUzBl0y7fn1XNTaDqfRg==
+next-seo@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/next-seo/-/next-seo-4.4.0.tgz#490f1064e89af55043559459c9cd04220e4d651d"
+  integrity sha512-8ySgeXpntn4mdcyuDQo9A2ESes8hLZ/G+YwzIg5fLrK8CxqrAVCUoCxAO/BJZf1QgMddSDUDlKtlLJspJ89Jtg==
 
 next-tick@~1.0.0:
   version "1.0.0"

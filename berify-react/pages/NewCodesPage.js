@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ChatBox from '../components/ChatBox';
 import axios from 'axios';
-import { Tabs, Radio, Button, Select, Input, Modal } from 'antd';
+import { Tabs, Radio, Button, Select, InputNumber, Modal } from 'antd';
 import * as types from '../redux/types';
 import { Router } from '../routes';
 //comment
@@ -13,15 +13,67 @@ class TrackerPage extends Component {
     }
 
     state = {
-        text: ''
+        num: '',
+        downloadLoading: false
+    };
+
+    downloadFile = async () => {
+        this.setState({ downloadLoading: true });
+        fetch('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example')
+            .then(response => response.blob())
+            .then(blob => {
+                // 2. Create blob link to download
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `sample.jpg`);
+                // 3. Append to html page
+                document.body.appendChild(link);
+                // 4. Force download
+                link.click();
+                // 5. Clean up and remove the link
+                link.parentNode.removeChild(link);
+                this.setState({ downloadLoading: false });
+            });
     };
 
     render() {
         return (
-            <div style={{ width: '90vw', margin: '3vw' }}>
-                <h2>Please Input the Number of QR Codes Required</h2>
-                    <Input type="basicusage" style={{width: '90%', margin: '0px 10px 0px 0px'}}></Input>
-                    <Button type="primary">Submit</Button>
+            <div
+                style={{
+                    width: '94vw',
+                    margin: '3vw',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                }}
+            >
+                <h1 style={{ textAlign: 'center' }}>
+                    Please Input the Number of QR Codes Required
+                </h1>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-around'
+                    }}
+                >
+                    <InputNumber
+                        onChange={num => this.setState({ num })}
+                        style={{ width: '70vw', margin: '0px 10px 0px 0px' }}
+                    ></InputNumber>
+                    <Button type="primary" onClick={() => console.log('Clicked File')}>
+                        Submit
+                    </Button>
+                </div>
+
+                <Button
+                    onClick={this.downloadFile}
+                    loading={this.state.downloadLoading}
+                    style={{ margin: '20px' }}
+                >
+                    Download Files
+                </Button>
             </div>
         );
     }

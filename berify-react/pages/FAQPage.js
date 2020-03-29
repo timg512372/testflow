@@ -24,14 +24,6 @@ class FAQPage extends Component {
     render() {
         return (
             <div>
-                <NextSeo
-                    title="FAQ | Berify"
-                    twitter={{ title: 'FAQ | Berify' }}
-                    openGraph={{
-                        title: 'FAQ | Berify'
-                    }}
-                />
-
                 <div style={{ textAlign: 'center', marginTop: '30px' }}>
                     <h1> Frequently Asked Questions </h1>
                 </div>
@@ -52,7 +44,7 @@ class FAQPage extends Component {
 }
 const content = [
     {
-        title: 'What do I need to play?',
+        title: 'What do I need to participate?',
         content: [
             {
                 title: 'A Desktop Browser',

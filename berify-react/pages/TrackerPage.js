@@ -27,24 +27,6 @@ class TrackerPage extends Component {
         text: ''
     };
 
-    downloadFile = async () => {
-        fetch('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example')
-            .then(response => response.blob())
-            .then(blob => {
-                // 2. Create blob link to download
-                const url = window.URL.createObjectURL(new Blob([blob]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', `sample.jpg`);
-                // 3. Append to html page
-                document.body.appendChild(link);
-                // 4. Force download
-                link.click();
-                // 5. Clean up and remove the link
-                link.parentNode.removeChild(link);
-            });
-    };
-
     renderNumbers = () => {
         const data = [
             { text: 'Number Tested', num: 20000 },
@@ -146,11 +128,6 @@ class TrackerPage extends Component {
                             flexDirection: 'column'
                         }}
                     >
-                        <img
-                            src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=example"
-                            alt="something"
-                        />
-                        <Button onClick={this.downloadFile}>Download File </Button>
                         <h2> Test Kit Distribution over Time </h2>
                         <LineChart
                             width={730}

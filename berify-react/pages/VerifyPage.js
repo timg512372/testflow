@@ -17,18 +17,6 @@ class VerifyPage extends Component {
         text: ''
     };
 
-    renderCard = info => {};
-
-    handleApiLoaded = (map, maps) => {
-        let marker = maps.Marker({
-            position: {
-                lat: 40,
-                lng: -96
-            },
-            map: map
-        });
-    };
-
     renderCards = (factories, verified) => {
         return (
             <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row' }}>
@@ -153,7 +141,7 @@ class VerifyPage extends Component {
                     alignItems: 'center'
                 }}
             >
-                <h1>Verify COVID-19 Manufacturers</h1>
+                <h1>Verify Test Kit Manufacturers</h1>
                 <div
                     style={{
                         display: 'flex',
