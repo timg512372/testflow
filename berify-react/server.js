@@ -2,7 +2,7 @@ const { createServer } = require('http');
 const next = require('next');
 
 const app = next({
-    dev: process.env.NODE_ENV === 'development'
+    dev: process.env.NODE_ENV !== 'Production'
 });
 
 console.log(process.env.NODE_ENV);
