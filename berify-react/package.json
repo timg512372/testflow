@@ -1,7 +1,7 @@
 {
     "name": "create-next-example-app",
     "scripts": {
-        "dev": "NODE_ENV=development node server.js",
+        "dev": "node server.js",
         "build": "./node_modules/next/dist/bin/next build",
         "start": " NODE_ENV=production node server.js -p $PORT"
     },
@@ -30,7 +30,8 @@
         "redux": "4.0.0",
         "redux-devtools-extension": "^2.13.5",
         "redux-thunk": "^2.2.0",
-        "web3": "^1.2.6"
+        "web3": "^1.2.6",
+        "yarn": "^1.22.4"
     },
     "devDependencies": {
         "@babel/core": "^7.1.2",
