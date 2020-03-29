@@ -1,29 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { logoutUser, loginUser } from '../redux/actions/auth_actions';
+import { LogoutOutlined } from '@ant-design/icons';
 import { Divider, Icon, Button, Input } from 'antd';
 import { Router } from '../routes';
-import axios from 'axios';
-import Web3 from 'web3';
 
 class PlayerInfo extends Component {
     state = {
-        dcBalance: '0',
-        ethBalance: '0',
-        value: 0,
-        expand: false,
-        email: '',
-        password: '',
-        loading: false
+        userName: '',
+        password: ''
     };
 
     submit = async () => {
         const user = {
-            email: this.state.email,
+            userName: this.state.userName,
             password: this.state.password
         };
 
-        this.props.loginUser(user, () => Router.pushRoute('/'));
+        this.props.loginUser(user);
     };
 
     renderNotLoggedIn() {
@@ -46,10 +40,10 @@ class PlayerInfo extends Component {
                     <h2> Log In </h2>
                     <Input
                         style={{ marginBottom: '10px' }}
-                        placeholder="Email"
+                        placeholder="Username"
                         onChange={event =>
                             this.setState({
-                                email: event.target.value
+                                userName: event.target.value
                             })
                         }
                     />
@@ -66,7 +60,6 @@ class PlayerInfo extends Component {
                         type="primary"
                         style={{ margin: '20px 20px 0px 20px' }}
                         onClick={this.submit}
-                        loading={this.state.loading}
                     >
                         Log In
                     </Button>
@@ -95,8 +88,6 @@ class PlayerInfo extends Component {
     }
 
     renderLoggedIn() {
-        const web3 = new Web3('https://rinkeby.infura.io/v3/6a20903e63ec4a96a771a79800a1a1d4');
-
         const full = (
             <div
                 style={{
@@ -121,7 +112,7 @@ class PlayerInfo extends Component {
                             fontWeight: '600'
                         }}
                     >
-                        {this.props.user.email}
+                        {this.props.user.userName}
                     </span>
                 </div>
 
@@ -142,25 +133,8 @@ class PlayerInfo extends Component {
                     </div>
                 </div>
 
-                <div
-                    style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        justifyContent: 'center'
-                    }}
-                >
-                    {this.links.map(link => (
-                        <Button
-                            icon={link.icon}
-                            onClick={link.click}
-                            style={{ width: '120px', margin: '5px' }}
-                        >
-                            {link.text}
-                        </Button>
-                    ))}
-                </div>
                 <Button
-                    icon="logout"
+                    icon={<LogoutOutlined />}
                     onClick={() => this.props.logoutUser(() => Router.push('/'))}
                     type="danger"
                     style={{ width: '220px' }}
@@ -176,11 +150,6 @@ class PlayerInfo extends Component {
     render() {
         return this.props.isAuthenticated ? this.renderLoggedIn() : this.renderNotLoggedIn();
     }
-
-    links = [
-        { text: 'Bugs', icon: 'exclamation-circle' },
-        { text: 'Friends', icon: 'team' }
-    ];
 }
 
 const mapStateToProps = state => {
@@ -188,4 +157,7 @@ const mapStateToProps = state => {
     return { user, isAuthenticated, error };
 };
 
-export default connect(mapStateToProps, { loginUser, logoutUser })(PlayerInfo);
+export default connect(
+    mapStateToProps,
+    { loginUser, logoutUser }
+)(PlayerInfo);

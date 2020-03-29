@@ -3,8 +3,7 @@ import { Button, Input } from 'antd';
 import { connect } from 'react-redux';
 import { NextSeo } from 'next-seo';
 import * as types from '../redux/types';
-//import { registerUser } from '../redux/actions';
-import { Router } from '../routes';
+import { registerUser } from '../redux/actions';
 
 class Register extends Component {
     static getInitialProps({ store, query }) {
@@ -13,32 +12,24 @@ class Register extends Component {
     }
 
     state = {
-        name: '',
-        username: '',
+        institution: '',
+        userName: '',
         password: '',
-        confirmPassword: '',
+        password_confirm: '',
         location: ''
     };
 
     handleRegister = async () => {
         const user = {
-            email: this.state.email,
+            institution: this.state.institution,
+            userName: this.state.userName,
             password: this.state.password,
-            password_confirm: this.state.confirmPassword,
-            code: this.state.schoolCode,
-            administrator: this.props.admin
-        };
-    };
-    handleRegister = async () => {
-        const user = {
-            email: this.state.email,
-            password: this.state.password,
-            password_confirm: this.state.confirmPassword,
-            code: this.state.schoolCode,
-            administrator: this.props.admin
+            password_confirm: this.state.password_confirm,
+            location: this.state.location,
+            role: 'factory'
         };
 
-        this.props.registerUser(user, () => Router.pushRoute('/inks'));
+        this.props.registerUser(user);
     };
 
     render() {
@@ -59,18 +50,18 @@ class Register extends Component {
                     <div style={styles.inputdiv}>
                         <h3 style={styles.prompt}> Institution Name: </h3>
                         <Input
-                            onChange={event => this.setState({ name: event.target.value })}
+                            onChange={event => this.setState({ institution: event.target.value })}
                             style={styles.input}
-                            value={this.state.email}
+                            value={this.state.Institution}
                         />
                     </div>
 
                     <div style={styles.inputdiv}>
                         <h3 style={styles.prompt}> Username: </h3>
                         <Input
-                            onChange={event => this.setState({ username: event.target.value })}
+                            onChange={event => this.setState({ userName: event.target.value })}
                             style={styles.input}
-                            value={this.state.email}
+                            value={this.state.userName}
                         />
                     </div>
                     <div style={styles.inputdiv}>
@@ -86,11 +77,11 @@ class Register extends Component {
                         <h3 style={styles.prompt}> Confirm Password: </h3>
                         <Input.Password
                             onChange={event =>
-                                this.setState({ confirmPassword: event.target.value })
+                                this.setState({ password_confirm: event.target.value })
                             }
                             placeholder=""
                             style={styles.input}
-                            value={this.state.confirmPassword}
+                            value={this.state.password_confirm}
                         />
                     </div>
                     <div style={styles.inputdiv}>
@@ -98,7 +89,7 @@ class Register extends Component {
                         <Input
                             onChange={event => this.setState({ location: event.target.value })}
                             style={styles.input}
-                            value={this.state.email}
+                            value={this.state.location}
                         />
                     </div>
 
@@ -147,4 +138,7 @@ const mapStateToProps = state => {
     return { loading, error };
 };
 
-export default connect(mapStateToProps, {})(Register);
+export default connect(
+    mapStateToProps,
+    { registerUser }
+)(Register);

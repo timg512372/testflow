@@ -2,6 +2,7 @@ import * as types from '../types';
 import axios from 'axios';
 import setAuthToken, { showSuccessModal, showErrorModal } from '../../components/functions';
 import jwt_decode from 'jwt-decode';
+import Router from 'next/router';
 
 export const registerUser = (user, callback) => {
     return async dispatch => {
@@ -14,14 +15,14 @@ export const registerUser = (user, callback) => {
                 url: `${process.env.SERVER_URL}/api/auth/register`,
                 data: { ...user }
             });
-            console.log('success');
+
             const { token } = res.data;
             localStorage.setItem('jwtToken', token);
             setAuthToken(token);
             const decoded = jwt_decode(token);
             dispatch(setCurrentUser(decoded));
             showSuccessModal('Successfully Created User');
-            callback();
+            Router.push('/newcode');
         } catch (err) {
             console.log(err);
             showErrorModal(err.message);
