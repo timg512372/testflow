@@ -44,7 +44,7 @@ class HomePage extends Component {
                     <img style={{
                                 paddingTop: '20px',
                                 paddingRight: '40px',
-                                width: '40vw',
+                                width: '45vw',
                                 height: '30vw'
                             }}
                     alt="scanQR" src="/static/scanQR.png" />
@@ -67,55 +67,77 @@ class HomePage extends Component {
                         <h1 style={{
                             fontSize: '50px',
                             color: '#0C1752',
-                            marginBottom: '5vw'
+                            marginBottom: '5vw',
+                            paddingTop: '5vw'
                         }}>
                          TestFlow tracks test inventory on the blockchain, securing your testing results
                          </h1>
+
+                        {/*Detail 1*/}
                          <div style={{
-                            padding: '5vw'}}>
+                            padding: '5vw',
+                            display: 'flex'}}>
                             <img style= {{
                                 width: '10vw', 
-                                height: '10vw', 
+                                height: '10vw',
+                                display: 'inline', 
                                 float: 'left'}} alt="numberOne" src="/static/numberOne.png"/>
                             <h2 style={{ 
-                                paddingTop: '1vw',
-                                paddingLeft: '12vw',
+                                paddingLeft: '5vw',
+                                textAlign: 'left',
                                 fontSize: '30px',
                                 color: '#00648D',
-                                flexWrap: 'wrap',
                                 width: '50vw'
                             }}>A QR code would be assigned to each testing kit upon factory production</h2>
+                            <img style= {{
+                                width: '20vw', 
+                                height: '10vw',
+                                paddingLeft: '5vw'}} alt="numberOneImage" src="/static/numberOneImage.png"/>
                         </div>
                         <img style= {{width: '12vx', height: '3vw'}} alt="lineBreak" src="/static/lineBreak.png"/>
+
+                        {/*Detail 2*/}
                         <div style={{
-                            padding: '5vw'}}>
+                            padding: '5vw',
+                            display: 'flex'}}>
                             <img style= {{
                                 width: '10vw', 
-                                height: '10vw', 
-                                float: 'left'}} alt="numberTwo" src="/static/numberTwo.png" />
-                            <h2 style={{
-                                paddingLeft: '12vw',
+                                height: '10vw',
+                                display: 'inline', 
+                                float: 'left'}} alt="numberTwo" src="/static/numberTwo.png"/>
+                            <h2 style={{ 
+                                paddingLeft: '5vw',
+                                textAlign: 'left',
                                 fontSize: '30px',
                                 color: '#00648D',
-                                flexWrap: 'wrap',
                                 width: '50vw'
                             }}>Everytime your testing kit is moved, its QR code will be scanned. This prevents your kit from being lost</h2>
-                        </div> 
-                        <img style= {{width: '12vw', height: '3vw'}} alt="lineBreak" src="/static/lineBreak.png"/>
+                            <img style= {{
+                                width: '20vw', 
+                                height: '15vw',
+                                paddingLeft: '5vw'}} alt="numberTwoImage" src="/static/numberTwoImage.png"/>
+                        </div>
+                        <img style= {{width: '12vx', height: '3vw'}} alt="lineBreak" src="/static/lineBreak.png"/>
+
+                        {/*Detail 3*/}
                         <div style={{
-                            padding: '5vw'}}>
+                            padding: '5vw',
+                            display: 'flex'}}>
                             <img style= {{
                                 width: '10vw', 
                                 height: '10vw', 
                                 float: 'left'}} alt="numberThree" src="/static/numberThree.png" />
                             <h2 style={{ 
-                                paddingTop: '1vw',
-                                paddingLeft: '12vw',
+                                paddingLeft: '5vw',
+                                textAlign: 'left',
                                 fontSize: '30px',
                                 color: '#00648D',
-                                flexWrap: 'wrap',
                                 width: '50vw'
                             }}>Enter a confirmation code in order to check the progress of your test</h2>
+                            <img style= {{
+                                width: '20vw', 
+                                height: '13vw',
+                                paddingLeft: '5vw'}} alt="numberThreeImage" src="/static/numberThreeImage.png"/>
                         </div>
                     </div>
                 </div>
