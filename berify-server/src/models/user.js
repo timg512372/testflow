@@ -35,11 +35,11 @@ const User = new mongoose.Schema({
   privateKey: {
     type: String,
     unique: true,
-    require: true
+    required: true
   },
   date: {
     type: Date,
-    default: Date.now()
+    required: true
   }
 });
 

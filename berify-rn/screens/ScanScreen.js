@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { View, Image, Alert } from 'react-native';
+import { View, Image, Alert, AsyncStorage } from 'react-native';
 import { Text, Icon, Button, Modal, Radio, RadioGroup, ButtonGroup } from '@ui-kitten/components';
 import { connect } from 'react-redux';
 import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh
 } from 'react-native-responsive-screen';
+import axios from 'axios';
+import { SERVER_URL } from '../dotenv.json';
 
 import QRScanner from '../components/QRScanner';
 
@@ -32,9 +34,6 @@ class ScanScreen extends React.Component {
             ]);
         } else if (this.props.route.params.action == 'r') {
             this.setState({ showModal: 'r', test: data });
-
-            // this.setState({ scanning: true, number: this.state.number + 1 });
-            // this.codes.push(data);
         } else {
             Alert.alert('Success!', `Test Kit ${data} Scanned`, [
                 {
@@ -53,13 +52,18 @@ class ScanScreen extends React.Component {
         }
     };
 
-    onButtonPress = () => {
-        // Different actions depending on the parameter that's passed in
+    onButtonPress = async () => {
+        const token = await AsyncStorage.getItem('jwtToken');
+        axios.defaults.headers.common['Authorization'] = token;
+
+        await axios.post(`${SERVER_URL}/api/test/hospitalTransfer`, {
+            QRs: this.codes
+        });
+
+        this.props.navigation.goBack();
     };
 
     render() {
-        console.log(this.state.scanning);
-        console.log(this.codes);
         return (
             <View style={{ flex: 1, justifyContent: 'flex-start' }}>
                 <QRScanner onBarCodeScanned={this.state.scanning ? this.onBarCodeScanned : null} />

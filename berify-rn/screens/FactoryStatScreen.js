@@ -1,16 +1,31 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, AsyncStorage } from 'react-native';
 import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh
 } from 'react-native-responsive-screen';
 import { connect } from 'react-redux';
 import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
+import { SERVER_URL } from '../dotenv.json';
 
 import { logoutUser } from '../redux/actions';
 import { TOP } from '../assets/images';
 
+import axios from 'axios';
+
 class FactoryStatScreen extends React.Component {
+    componentDidMount = async () => {
+        const token = await AsyncStorage.getItem('jwtToken');
+        axios.defaults.headers.common['Authorization'] = token;
+
+        const { data } = await axios.get(`${SERVER_URL}/api/test/exports`);
+        this.setState({ exports: data.exports });
+    };
+
+    state = {
+        exports: []
+    };
+
     renderData = () => {
         const dummyData = [
             { date: 'March 14, 2020', num: 189 },
@@ -19,7 +34,7 @@ class FactoryStatScreen extends React.Component {
             { date: 'March 11, 2020', num: 0 }
         ];
 
-        const bubbles = dummyData.map(point => {
+        const bubbles = this.state.exports.map(item => {
             return (
                 <View
                     style={{
@@ -31,13 +46,13 @@ class FactoryStatScreen extends React.Component {
                         width: '100%',
                         padding: 5
                     }}
-                    key={point.date}
+                    key={item.date}
                 >
                     <Text style={{ color: `#656565` }} category="c1">
-                        {point.date}
+                        {item.date}
                     </Text>
                     <Text style={{ color: `#2B4899` }} category="h3">
-                        {point.num} Test Kits Exported
+                        {item.quantity} Test Kits Exported
                     </Text>
                 </View>
             );
@@ -81,8 +96,6 @@ class FactoryStatScreen extends React.Component {
     };
 
     render() {
-        console.log(this.props.auth);
-
         return (
             <View
                 style={{
@@ -126,4 +139,7 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(mapStateToProps, { logoutUser })(FactoryStatScreen);
+export default connect(
+    mapStateToProps,
+    { logoutUser }
+)(FactoryStatScreen);
