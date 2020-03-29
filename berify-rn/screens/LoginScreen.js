@@ -3,19 +3,14 @@ import { Image, View, Text } from 'react-native';
 import { Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
-
 import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh
 } from 'react-native-responsive-screen';
+import axios from 'axios';
+import { handleLogin, changeLUserName, changeLPassword } from '../redux/actions';
 
 class LoginScreen extends React.Component {
-    state = {
-        username: '',
-        password: '',
-        error: ''
-    };
-
     render() {
         return (
             <View
@@ -51,14 +46,14 @@ class LoginScreen extends React.Component {
                         </Text>
                         <Input
                             placeholder="Username"
-                            value={this.state.username}
-                            onChangeText={val => this.setState({ username: val })}
+                            value={this.props.auth.lUserName}
+                            onChangeText={val => this.props.changeLUserName(val)}
                             style={{ margin: 10, borderRadius: 8 }}
                         />
                         <Input
                             placeholder="Password"
-                            value={this.state.password}
-                            onChangeText={val => this.setState({ password: val })}
+                            value={this.props.auth.lPassword}
+                            onChangeText={val => this.props.changeLPassword(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                             secureTextEntry={true}
                         />
@@ -72,19 +67,17 @@ class LoginScreen extends React.Component {
                             <Button
                                 size="small"
                                 style={{ borderRadius: 8 }}
-                                onPress={() => console.log('logging in')}
+                                onPress={() =>
+                                    this.props.handleLogin(
+                                        this.props.auth.lUserName,
+                                        this.props.auth.lPassword,
+                                        this.props.navigation
+                                    )
+                                }
                             >
                                 Continue
                             </Button>
-                            <Button
-                                size="small"
-                                appearance="ghost"
-                                onPress={() => this.props.navigation.push('NewInstitution')}
-                            >
-                                Create an Account
-                            </Button>
                         </View>
-                        <Text status="warning">{this.state.error}</Text>
                     </View>
                 </LinearGradient>
             </View>
@@ -93,7 +86,11 @@ class LoginScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return {};
+    const { auth } = state;
+    return { auth };
 };
 
-export default connect(mapStateToProps, null)(LoginScreen);
+export default connect(
+    mapStateToProps,
+    { handleLogin, changeLUserName, changeLPassword }
+)(LoginScreen);
