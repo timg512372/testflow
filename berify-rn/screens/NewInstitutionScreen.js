@@ -7,22 +7,17 @@ import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh
 } from 'react-native-responsive-screen';
-
-import { LANDING } from '../assets/images';
-import LocationPicker from '../components/LocationPicker';
+import {
+    changeUserName,
+    changeInstitution,
+    changePassword,
+    changePasswordConfirm,
+    changeLocation,
+    changeRole,
+    handleRegister
+} from '../redux/actions';
 
 class NewInstitutionScreen extends React.Component {
-    state = {
-        name: '',
-        type: '',
-        code: '',
-        error: '',
-        location: '',
-        username: '',
-        password: '',
-        pconfirm: ''
-    };
-
     render() {
         return (
             <View
@@ -54,47 +49,49 @@ class NewInstitutionScreen extends React.Component {
                             category="h1"
                             style={{ marginTop: vh(13), marginLeft: 20, fontWeight: '700' }}
                         >
-                            Create New Institution
+                            Create Institution
                         </Text>
                         <Input
                             placeholder="Institution Name"
-                            value={this.state.username}
-                            onChangeText={val => this.setState({ name: val })}
+                            value={this.props.auth.institution}
+                            onChangeText={val => this.props.changeInstitution(val)}
                             style={{ margin: 10, borderRadius: 8 }}
                         />
                         <Input
                             placeholder="Username"
-                            value={this.state.password}
-                            onChangeText={val => this.setState({ username: val })}
+                            value={this.props.auth.userName}
+                            onChangeText={val => this.props.changeUserName(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                         />
                         <Input
                             placeholder="Password"
-                            value={this.state.password}
-                            onChangeText={val => this.setState({ password: val })}
+                            value={this.props.auth.password}
+                            onChangeText={val => this.props.changePassword(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                             secureTextEntry={true}
                         />
+
                         <Input
                             placeholder="Confirm Password"
-                            value={this.state.pconfirm}
-                            onChangeText={val => this.setState({ pconfirm: val })}
+                            value={this.props.auth.password_confirm}
+                            onChangeText={val => this.props.changePasswordConfirm(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                             secureTextEntry={true}
+                        />
+
+                        <Input
+                            placeholder="Location"
+                            value={this.props.auth.location}
+                            onChangeText={val => this.props.changeLocation(val)}
+                            style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                         />
 
                         <Select
-                            data={[
-                                { text: 'Producer' },
-                                { text: 'Tester' },
-                                { text: 'Laboratory' }
-                            ]}
-                            selectedOption={this.state.type}
-                            onSelect={val => this.setState({ type: val })}
+                            data={[{ text: 'factory' }, { text: 'hospital' }, { text: 'lab' }]}
+                            selectedOption={this.props.auth.role}
+                            onSelect={val => this.props.changeRole(val)}
                             style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
                         />
-
-                        <LocationPicker getLocation={location => this.setState({ location })} />
 
                         <View
                             style={{
@@ -106,7 +103,17 @@ class NewInstitutionScreen extends React.Component {
                             <Button
                                 size="small"
                                 style={{ borderRadius: 8 }}
-                                onPress={() => console.log('logging in')}
+                                onPress={() =>
+                                    this.props.handleRegister(
+                                        this.props.auth.institution,
+                                        this.props.auth.userName,
+                                        this.props.auth.password,
+                                        this.props.auth.password_confirm,
+                                        this.props.auth.role.text,
+                                        this.props.auth.location,
+                                        this.props.navigation
+                                    )
+                                }
                             >
                                 Continue
                             </Button>
@@ -118,7 +125,6 @@ class NewInstitutionScreen extends React.Component {
                                 Back
                             </Button>
                         </View>
-                        <Text status="warning">{this.state.error}</Text>
                     </View>
                 </LinearGradient>
             </View>
@@ -126,4 +132,20 @@ class NewInstitutionScreen extends React.Component {
     }
 }
 
-export default connect()(NewInstitutionScreen);
+const mapStateToProps = state => {
+    const { auth } = state;
+    return { auth };
+};
+
+export default connect(
+    mapStateToProps,
+    {
+        changeUserName,
+        changeInstitution,
+        changePassword,
+        changePasswordConfirm,
+        changeLocation,
+        changeRole,
+        handleRegister
+    }
+)(NewInstitutionScreen);

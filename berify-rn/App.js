@@ -23,6 +23,35 @@ import FactoryStatScreen from './screens/FactoryStatScreen';
 import HospitalScreen from './screens/HospitalScreen';
 import LabScreen from './screens/LabScreen';
 
+const Stack = createStackNavigator();
+
+function Hospital() {
+    return (
+        <Stack.Navigator headerMode="none">
+            <Stack.Screen name="Hospital" component={HospitalScreen} />
+            <Stack.Screen name="Scan" component={ScanScreen} />
+        </Stack.Navigator>
+    );
+}
+
+function Factory() {
+    return (
+        <Stack.Navigator headerMode="none">
+            <Stack.Screen name="FactoryStat" component={FactoryStatScreen} />
+            <Stack.Screen name="Scan" component={ScanScreen} />
+        </Stack.Navigator>
+    );
+}
+
+function Lab() {
+    return (
+        <Stack.Navigator headerMode="none">
+            <Stack.Screen name="Lab" component={LabScreen} />
+            <Stack.Screen name="Scan" component={ScanScreen} />
+        </Stack.Navigator>
+    );
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -51,37 +80,6 @@ class App extends React.Component {
     }
 
     render() {
-        const Stack = createStackNavigator();
-
-        let AuthScreens = (
-            <>
-                <Stack.Screen name="Landing" component={LandingScreen} />
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="NewInstitution" component={NewInstitutionScreen} />
-            </>
-        );
-
-        let FactoryScreens = (
-            <>
-                <Stack.Screen name="FactoryStat" component={FactoryStatScreen} />
-                <Stack.Screen name="Scan" component={ScanScreen} />
-            </>
-        );
-
-        let HospitalScreens = (
-            <>
-                <Stack.Screen name="Hospital" component={HospitalScreen} />
-                <Stack.Screen name="Scan" component={ScanScreen} />
-            </>
-        );
-
-        let LabScreens = (
-            <>
-                <Stack.Screen name="Lab" component={LabScreen} />
-                <Stack.Screen name="Scan" component={ScanScreen} />
-            </>
-        );
-
         if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
             return <ApplicationProvider mapping={mapping} theme={myTheme}></ApplicationProvider>;
         } else {
@@ -94,7 +92,17 @@ class App extends React.Component {
                         customMapping={customMapping}
                     >
                         <NavigationContainer>
-                            <Stack.Navigator headerMode={null}>{AuthScreens}</Stack.Navigator>
+                            <Stack.Navigator headerMode={null}>
+                                <Stack.Screen name="Landing" component={LandingScreen} />
+                                <Stack.Screen name="Login" component={LoginScreen} />
+                                <Stack.Screen
+                                    name="NewInstitution"
+                                    component={NewInstitutionScreen}
+                                />
+                                <Stack.Screen name="HospitalMain" component={Hospital} />
+                                <Stack.Screen name="FactoryMain" component={Factory} />
+                                <Stack.Screen name="LabMain" component={Lab} />
+                            </Stack.Navigator>
                         </NavigationContainer>
                     </ApplicationProvider>
                 </Provider>

@@ -1,0 +1,9 @@
+export const CHANGE_USER_NAME = 'change-user-name';
+export const CHANGE_INSTITUTION = 'change-institution';
+export const CHANGE_PASSWORD = 'change-password';
+export const CHANGE_PASSWORD_CONFIRM = 'change-password-confirm';
+export const CHANGE_LOCATION = 'change-location';
+export const CHANGE_ROLE = 'change-role';
+export const SET_CURRENT_USER = 'set-current-user';
+export const CHANGE_L_USER_NAME = 'change-l-user-name';
+export const CHANGE_L_PASSWORD = 'change-l-password';
