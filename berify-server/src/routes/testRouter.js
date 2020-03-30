@@ -133,25 +133,22 @@ router.post(
       TestFactory.networks["9545242630824"].address
     );
 
-    for (let i = 0; i < req.body.QRs.length; i++) {
-      const preformattedToken = req.body.QRs[i].substring(
-        req.body.QRs[i].indexOf("tokenId")
-      );
-      const tokenId = preformattedToken.substring(7);
+    const preformattedTest = req.body.test.substring(
+      req.body.test.indexOf("tokenId")
+    );
+    const testId = preformattedTest.substring(7);
 
-      try {
-        await testFactoryInstance.methods.hospitalTransfer(tokenId).send({
-          from: address
-        });
-      } catch (e) {
-        return res.sendStatus(400);
-      }
+    try {
+      await testFactoryInstance.methods.hospitalTransfer(testId).send({
+        from: address
+      });
+    } catch (e) {
+      return res.sendStatus(400);
     }
 
     const newExport = new Export({
       factoryId: user._id,
-      QRs: req.body.QRs,
-      quantity: req.body.QRs.length,
+      testId,
       date: Date.now()
     });
 
@@ -167,11 +164,49 @@ router.get(
   async (req, res) => {
     const user = await User.findOne({ userName: req.user.userName }).lean();
     if (!user) {
-      res.sendStatus(400);
+      return res.sendStatus(400);
     }
 
     const exports = await Export.find({ factoryId: user._id });
     res.json({ exports });
+  }
+);
+
+router.post(
+  "/check",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const privateKey = CryptoUtils.generatePrivateKey();
+    const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
+    const address = LocalAddress.fromPublicKey(publicKey).toString();
+
+    let client = new Client(
+      "extdev-plasma-us1",
+      "wss://extdev-plasma-us1.dappchains.com/websocket",
+      "wss://extdev-plasma-us1.dappchains.com/queryws"
+    );
+
+    client.txMiddleware = [
+      new NonceTxMiddleware(publicKey, client),
+      new SignedTxMiddleware(privateKey)
+    ];
+
+    let web3 = new Web3(new LoomProvider(client, privateKey));
+    let testFactoryInstance = new web3.eth.Contract(
+      TestFactory.abi,
+      TestFactory.networks["9545242630824"].address
+    );
+
+    const preformattedTest = req.body.test.substring(
+      req.body.test.indexOf("tokenId")
+    );
+    const testId = preformattedTest.substring(7);
+
+    const test = await testFactoryInstance.methods
+      .checkTest(testId)
+      .call({ from: address });
+
+    res.json({ test });
   }
 );
 

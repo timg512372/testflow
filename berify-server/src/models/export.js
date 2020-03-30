@@ -5,11 +5,7 @@ const Export = new mongoose.Schema({
     type: String,
     required: true
   },
-  QRs: {
-    type: Array,
-    required: true
-  },
-  quantity: {
+  testId: {
     type: Number,
     required: true
   },
