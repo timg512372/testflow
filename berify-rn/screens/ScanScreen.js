@@ -131,36 +131,50 @@ class ScanScreen extends React.Component {
     };
 
     parseStatus = () => {
-        const { inTransit, role, result, tested } = this.state.selectedTest;
+        const { inTransit, role, tested } = this.state.selectedTest;
         let status = '';
+        let button = true;
         if (role == 'factory') {
             if (!inTransit) {
                 status = 'In Factory, Awaiting Shipment';
+                button = this.props.route.params.action == 'fl';
             } else {
                 if (this.props.route.params.action[0] == 'f') {
                     status = 'Already Shipped';
+                    button = false;
                 } else {
                     status = 'Shipped from Factory';
+                    button = this.props.route.params.action == 'ha';
                 }
             }
         } else if (role == 'hospital') {
             if (inTransit) {
                 if (this.props.route.params.action[0] == 'l') {
                     status = 'Shipped from Hospital';
+                    button = this.props.route.params.action == 'la';
                 } else {
                     status = 'Already Shipped';
+                    button = false;
                 }
             } else {
                 status = 'In Hospital, Awaiting Shipment';
+                button = this.props.route.params.action == 'hl';
             }
         } else if (role == 'lab' && this.props.route.params.action != 'lr') {
             if (!tested) {
                 status = 'Awaiting Results';
+                button = this.props.route.params.action == 'lr';
             } else {
                 status = 'Result Uploaded';
+                button = false;
             }
         }
-        return status;
+        return { status, button };
+    };
+
+    tokenId = string => {
+        let num = string.lastIndexOf('tokenId');
+        return string.substring(num + 7);
     };
 
     renderInModal() {
@@ -172,10 +186,11 @@ class ScanScreen extends React.Component {
                 </Text>
             );
         } else {
+            let data = this.parseStatus();
             content = (
                 <>
                     <Text category="h5" style={{ textAlign: 'center' }}>
-                        Status: {this.parseStatus()}
+                        Status: {data.status}
                     </Text>
                     {this.props.route.params.action == 'lr' &&
                     this.state.selectedTest.role == 'lab' ? (
@@ -190,19 +205,19 @@ class ScanScreen extends React.Component {
                             >
                                 <Radio
                                     style={{ marginVertical: 5 }}
-                                    text="positive"
+                                    text="Positive"
                                     textStyle={{ fontSize: 20 }}
                                     status="danger"
                                 />
                                 <Radio
                                     style={{ marginVertical: 5 }}
-                                    text="negative"
+                                    text="Negative"
                                     textStyle={{ fontSize: 20 }}
                                     status="success"
                                 />
                                 <Radio
                                     style={{ marginVertical: 5 }}
-                                    text="inconclusive"
+                                    text="Inconclusive"
                                     textStyle={{ fontSize: 20 }}
                                     status="info"
                                 />
@@ -216,6 +231,8 @@ class ScanScreen extends React.Component {
     }
 
     renderButtonGroup() {
+        let data = this.parseStatus();
+        console.log(data);
         let buttons = (
             <ButtonGroup
                 style={{
@@ -227,7 +244,7 @@ class ScanScreen extends React.Component {
                 <Button onPress={() => this.setState({ scanning: true, showModal: '' })}>
                     Cancel
                 </Button>
-                <Button onPress={this.onButtonPress}>
+                <Button onPress={this.onButtonPress} disabled={!data.button}>
                     {this.state.submitLoading ? 'Processing' : 'Submit'}
                 </Button>
             </ButtonGroup>
@@ -269,11 +286,11 @@ class ScanScreen extends React.Component {
                     <Text style={{ color: 'white', textAlign: 'center', margin: 10 }} category="h6">
                         {this.props.route.params.text}
                     </Text>
-                    {this.props.route.params.action == 'lr' && true ? null : (
+                    {/* {this.props.route.params.action == 'lr' && false ? null : (
                         <Button onPress={this.onButtonPress}>
                             Submit {this.state.number} Scans
                         </Button>
-                    )}
+                    )} */}
                 </View>
 
                 <Modal
@@ -283,7 +300,7 @@ class ScanScreen extends React.Component {
                     <View
                         style={{
                             width: vw(80),
-                            height: vh(40),
+                            height: vh(50),
                             backgroundColor: 'white',
                             borderRadius: 12,
                             padding: 10,
@@ -296,7 +313,7 @@ class ScanScreen extends React.Component {
                                 Success!
                             </Text>
                             <Text category="h6" style={{ textAlign: 'center' }}>
-                                Scanned Test {this.state.test}
+                                Scanned Test #{this.tokenId(this.state.test)}
                             </Text>
                             {this.renderInModal()}
                         </View>

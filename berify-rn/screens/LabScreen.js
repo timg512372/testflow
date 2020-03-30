@@ -26,7 +26,7 @@ class LabScreen extends React.Component {
     };
 
     renderData = () => {
-        const categories = [{ text: 'Test Kits to Process', num: 189 }];
+        const categories = [{ text: 'Test Kits to Process', num: this.state.imports.length }];
 
         const bubbles = categories.map(point => {
             return (
@@ -148,7 +148,4 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(
-    mapStateToProps,
-    { logoutUser }
-)(LabScreen);
+export default connect(mapStateToProps, { logoutUser })(LabScreen);
