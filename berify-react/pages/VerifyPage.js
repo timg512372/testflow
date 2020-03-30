@@ -83,12 +83,7 @@ class VerifyPage extends Component {
                                             <CheckSquareOutlined />
                                             &ensp;Verify
                                         </>
-                                    ) : (
-                                        <>
-                                            <CloseSquareOutlined />
-                                            &ensp;Remove Verification
-                                        </>
-                                    )}
+                                    ) : null}
                                 </div>
                             ]}
                         >
@@ -177,4 +172,7 @@ const mapStateToProps = state => {
     return { user, isAuthenticated, error };
 };
 
-export default connect(mapStateToProps, null)(VerifyPage);
+export default connect(
+    mapStateToProps,
+    null
+)(VerifyPage);

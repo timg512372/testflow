@@ -258,4 +258,7 @@ const mapStateToProps = state => {
     return { user, isAuthenticated, error };
 };
 
-export default connect(mapStateToProps, null)(TrackerPage);
+export default connect(
+    mapStateToProps,
+    null
+)(TrackerPage);

@@ -76,7 +76,9 @@ class ResultPage extends React.Component {
                         <h3>{this.state.test.date}</h3>
 
                         <h2>Result</h2>
-                        <h3>{this.state.test.result}</h3>
+                        <h3>
+                            {this.state.test.tested ? this.state.test.result : 'Awaiting Results'}
+                        </h3>
                     </Card>
                 ) : null}
             </div>
@@ -89,4 +91,7 @@ const mapStateToProps = state => {
     return { user, isAuthenticated };
 };
 
-export default connect(mapStateToProps, null)(ResultPage);
+export default connect(
+    mapStateToProps,
+    null
+)(ResultPage);
