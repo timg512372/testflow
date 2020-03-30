@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
-
-import ChatBox from '../components/ChatBox';
-
 import axios from 'axios';
-
-import { Router } from '../routes';
-
-import { Tabs, Radio, Button, Select, Input, Modal } from 'antd';
-
+import { Button, Select, Input, Modal, Card } from 'antd';
 import * as types from '../redux/types';
 
 class ResultPage extends React.Component {
@@ -17,19 +9,19 @@ class ResultPage extends React.Component {
         store.dispatch({ type: types.CHANGE_PAGE, payload: 'r' });
     }
 
-    constructor() {
-        super();
-        this.state = { text: '', id: '', error: '' };
-    }
+    state = {
+        testId: '',
+        test: {}
+    };
 
-    positiveOrNegative = () => {
-        var posOrNeg = Math.random() * (1 - 0) + 0;
+    check = async () => {
+        axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
+        const { data } = await axios.post(`${process.env.SERVER_URL}/api/test/defaultCheck`, {
+            testId: this.state.testId
+        });
+        this.setState({ test: data.test });
 
-        if (posOrNeg < 0.5) {
-            this.setState({ text: 'Positive' });
-        } else {
-            this.setState({ text: 'Negative' });
-        }
+        console.log(data.test);
     };
 
     render() {
@@ -52,28 +44,40 @@ class ResultPage extends React.Component {
                     }}
                 >
                     <Input
-                        id="text1"
-                        onChange={event => this.setState({ id: event.target.value })}
+                        onChange={event => this.setState({ testId: event.target.value })}
                         style={{ width: '70vw' }}
                     ></Input>
-                    <Button
-                        type="primary"
-                        onClick={this.positiveOrNegative}
-                        style={{ marginLeft: '20px' }}
-                    >
+                    <Button type="primary" onClick={this.check} style={{ marginLeft: '20px' }}>
                         Submit
                     </Button>
                 </div>
-                <h2 style={{ margin: '20px' }}>{this.state.text}</h2>
-                <div style={{ color: 'red' }}>{this.state.error}</div>
+
+                {this.state.test.result ? (
+                    <Card style={{ marginTop: '20px' }}>
+                        <h2>Factory</h2>
+                        <h3>{this.state.test.factory}</h3>
+
+                        <h2>Authority</h2>
+                        <h3>{this.state.test.authority}</h3>
+
+                        <h2>Date</h2>
+                        <h3>{this.state.test.date}</h3>
+
+                        <h2>Result</h2>
+                        <h3>{this.state.test.result ? 'Positive' : 'Negative'}</h3>
+                    </Card>
+                ) : null}
             </div>
         );
     }
 }
 
 const mapStateToProps = state => {
-    const { user, isAuthenticated, error } = state.auth;
-    return { user, isAuthenticated, error };
+    const { user, isAuthenticated } = state.auth;
+    return { user, isAuthenticated };
 };
 
-export default connect(mapStateToProps, null)(ResultPage);
+export default connect(
+    mapStateToProps,
+    null
+)(ResultPage);
