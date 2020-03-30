@@ -75,13 +75,35 @@ class ScanScreen extends React.Component {
             route = 'labTransfer';
         }
 
+        if (this.props.route.params.action == 'la') {
+            route = 'labObtain';
+        }
+
         try {
             const token = await AsyncStorage.getItem('jwtToken');
             axios.defaults.headers.common['Authorization'] = token;
 
-            await axios.post(`${SERVER_URL}/api/test/${route}`, {
-                test: this.state.test
-            });
+            let result = '';
+
+            if (this.state.result == 0) {
+                result = 'positive';
+            } else if (this.state.result == 1) {
+                result = 'negative';
+            } else {
+                result = 'inconclusive';
+            }
+
+            if (this.props.route.params.action == 'lr') {
+                await axios.post(`${SERVER_URL}/api/test/update`, {
+                    test: this.state.test,
+                    result
+                });
+            } else {
+                await axios.post(`${SERVER_URL}/api/test/${route}`, {
+                    test: this.state.test
+                });
+            }
+
             this.setState({ submitLoading: false, showModal: '' });
             console.log('success');
             this.goBack();
@@ -109,8 +131,7 @@ class ScanScreen extends React.Component {
     };
 
     parseStatus = () => {
-        const { inTransit, role, result } = this.state.selectedTest;
-        console.log(role);
+        const { inTransit, role, result, tested } = this.state.selectedTest;
         let status = '';
         if (role == 'factory') {
             if (!inTransit) {
@@ -125,15 +146,15 @@ class ScanScreen extends React.Component {
         } else if (role == 'hospital') {
             if (inTransit) {
                 if (this.props.route.params.action[0] == 'l') {
-                    status = 'Shipped from Lab';
+                    status = 'Shipped from Hospital';
                 } else {
                     status = 'Already Shipped';
                 }
             } else {
                 status = 'In Hospital, Awaiting Shipment';
             }
-        } else if (role == 'lab') {
-            if (isNullOrUndefined(result)) {
+        } else if (role == 'lab' && this.props.route.params.action != 'lr') {
+            if (!tested) {
                 status = 'Awaiting Results';
             } else {
                 status = 'Result Uploaded';
@@ -156,8 +177,8 @@ class ScanScreen extends React.Component {
                     <Text category="h5" style={{ textAlign: 'center' }}>
                         Status: {this.parseStatus()}
                     </Text>
-                    {this.props.route.params.action[0] == 'l' &&
-                    isNullOrUndefined(this.props.testObject.result) ? (
+                    {this.props.route.params.action == 'lr' &&
+                    this.state.selectedTest.role == 'lab' ? (
                         <>
                             <Text category="p1" style={{ textAlign: 'left' }}>
                                 Please enter a result
@@ -169,19 +190,19 @@ class ScanScreen extends React.Component {
                             >
                                 <Radio
                                     style={{ marginVertical: 5 }}
-                                    text="Positive"
+                                    text="positive"
                                     textStyle={{ fontSize: 20 }}
                                     status="danger"
                                 />
                                 <Radio
                                     style={{ marginVertical: 5 }}
-                                    text="Negative"
+                                    text="negative"
                                     textStyle={{ fontSize: 20 }}
                                     status="success"
                                 />
                                 <Radio
                                     style={{ marginVertical: 5 }}
-                                    text="Inconclusive"
+                                    text="inconclusive"
                                     textStyle={{ fontSize: 20 }}
                                     status="info"
                                 />

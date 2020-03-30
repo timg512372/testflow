@@ -11,8 +11,9 @@ contract TestFactory is Ownership {
     struct Test {
         address factory;
         string role;
-        bool result;
+        string result;
         bool inTransit;
+        bool tested;
         bytes32 QR;
         uint date;
     }
@@ -51,7 +52,7 @@ contract TestFactory is Ownership {
 
     function createTest(string calldata QR) external {
         require(isFactory[msg.sender]);
-        Test memory test = Test({ factory: msg.sender, role: "factory", result: false, inTransit: false, QR: keccak256(abi.encodePacked(QR)), date: now });
+        Test memory test = Test({ factory: msg.sender, role: "factory", result: "none", tested: false, inTransit: false, QR: keccak256(abi.encodePacked(QR)), date: now });
         uint testId = tests.push(test) - 1;
         testAuthority[testId] = msg.sender;
         authorityTests[msg.sender]++;
@@ -95,19 +96,22 @@ contract TestFactory is Ownership {
         authorityTests[msg.sender]++;
     }
 
-    function updateTest(uint testId, bool result) external {
+    function updateTest(uint testId, string calldata result) external {
         require(isLab[msg.sender]);
         require(testAuthority[testId] == msg.sender);
+        require(!tests[testId].tested);
         tests[testId].result = result;
+        tests[testId].tested = true;
     }
 
     function checkTest(uint testId) external view returns(
-        address factory, address authority, string memory role, bool result, bool inTransit, uint date, bool certified
+        address factory, address authority, string memory role, string memory result, bool tested, bool inTransit, uint date, bool certified
     ) {
         factory = tests[testId].factory;
         authority = testAuthority[testId];
         role = tests[testId].role;
         result = tests[testId].result;
+        tested = tests[testId].tested;
         inTransit = tests[testId].inTransit;
         date = tests[testId].date;
         certified = factoryCertified[factory];

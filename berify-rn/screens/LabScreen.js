@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, AsyncStorage } from 'react-native';
 import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh
@@ -9,13 +9,24 @@ import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
 
 import { logoutUser } from '../redux/actions';
 import { TOP } from '../assets/images';
+import axios from 'axios';
+import { SERVER_URL } from '../dotenv.json';
 
 class LabScreen extends React.Component {
+    componentDidMount = async () => {
+        const token = await AsyncStorage.getItem('jwtToken');
+        axios.defaults.headers.common['Authorization'] = token;
+
+        const { data } = await axios.get(`${SERVER_URL}/api/test/labImports`);
+        this.setState({ imports: data.imports });
+    };
+
+    state = {
+        imports: []
+    };
+
     renderData = () => {
-        const categories = [
-            { text: 'Test Kits to Process', num: 189 },
-            { text: 'Test Kits Processed', num: 76 }
-        ];
+        const categories = [{ text: 'Test Kits to Process', num: 189 }];
 
         const bubbles = categories.map(point => {
             return (
@@ -137,4 +148,7 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(mapStateToProps, { logoutUser })(LabScreen);
+export default connect(
+    mapStateToProps,
+    { logoutUser }
+)(LabScreen);

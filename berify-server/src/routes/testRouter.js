@@ -313,7 +313,7 @@ router.get(
       return res.sendStatus(400);
     }
 
-    const exports = await HospitalExports.find({ hospitalId: user._id });
+    const exports = await HospitalExport.find({ hospitalId: user._id });
     res.json({ exports });
   }
 );
@@ -387,7 +387,7 @@ router.get(
       return res.sendStatus(400);
     }
 
-    const imports = await labImports.find({ hospitalId: user._id });
+    const imports = await LabImport.find({ hospitalId: user._id });
     res.json({ imports });
   }
 );
@@ -434,6 +434,7 @@ router.post(
           from: address
         });
     } catch (e) {
+      console.log(e);
       return res.sendStatus(400);
     }
 
