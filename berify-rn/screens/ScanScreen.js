@@ -17,7 +17,10 @@ class ScanScreen extends React.Component {
         scanning: true,
         showModal: '',
         test: '',
-        result: ''
+        result: '',
+        loading: false,
+        status: '',
+        error: ''
     };
 
     codes = [];
@@ -28,40 +31,113 @@ class ScanScreen extends React.Component {
             Alert.alert('Error!', 'Not a QR Code', [
                 { text: 'OK', onPress: () => this.setState({ scanning: true }) }
             ]);
-        } else if (this.codes.includes(data)) {
-            Alert.alert('Error!', 'Duplicate Scan', [
-                { text: 'OK', onPress: () => this.setState({ scanning: true }) }
-            ]);
-        } else if (this.props.route.params.action == 'r') {
+        } else if (this.props.route.params.action == 'lr' && false) {
             this.setState({ showModal: 'r', test: data });
         } else {
-            Alert.alert('Success!', `Test Kit ${data} Scanned`, [
-                {
-                    text: 'OK',
-                    onPress: () => {
-                        this.setState({ scanning: true, number: this.state.number + 1 });
-                        this.codes.push(data);
-                    }
-                },
-                {
-                    text: 'Undo',
-                    onPress: () => this.setState({ scanning: true })
-                },
-                { cancelable: false }
-            ]);
+            // Alert.alert('Success!', `Test Kit ${data} Scanned`, [
+            //     {
+            //         text: 'OK',
+            //         onPress: () => {
+            //             this.setState({ scanning: true, number: this.state.number + 1 });
+            //             this.codes.push(data);
+            //         }
+            //     },
+            //     {
+            //         text: 'Undo',
+            //         onPress: () => this.setState({ scanning: true })
+            //     },
+            //     { cancelable: false }
+            // ]);
+            this.getStatus(data);
+            this.setState({ showModal: 'r', test: data, loading: true });
         }
     };
 
-    onButtonPress = async () => {
-        const token = await AsyncStorage.getItem('jwtToken');
-        axios.defaults.headers.common['Authorization'] = token;
-
-        await axios.post(`${SERVER_URL}/api/test/hospitalTransfer`, {
-            QRs: this.codes
-        });
-
-        this.props.navigation.goBack();
+    getStatus = async data => {
+        this.setState({ loading: false, status: 'hospital' });
     };
+
+    onButtonPress = async () => {
+        console.log('pressed button');
+        this.setState({ submitLoading: true });
+
+        try {
+            const token = await AsyncStorage.getItem('jwtToken');
+            axios.defaults.headers.common['Authorization'] = token;
+            await axios.post(`${SERVER_URL}/api/test/hospitalTransfer`, {
+                QRs: [this.state.test]
+            });
+            this.setState({ submitLoading: false, showModal: '' });
+            this.goBack();
+        } catch (e) {
+            this.setState({ submitLoading: false, error: e.message });
+        }
+    };
+
+    goBack = () => {
+        let url = 'FactoryStat';
+        if (
+            this.props.route.params.action == 'ha' ||
+            this.props.route.params.action == 'hl' ||
+            this.props.route.params.action == 'hs'
+        ) {
+            url = 'Hospital';
+        } else if (
+            this.props.route.params.action == 'la' ||
+            this.props.route.params.action == 'lr'
+        ) {
+            url = 'Lab';
+        }
+
+        this.props.navigation.push(url);
+    };
+
+    renderInModal() {
+        let content = null;
+        if (this.state.loading) {
+            content = (
+                <Text category="h5" style={{ textAlign: 'center' }}>
+                    Getting Information
+                </Text>
+            );
+        } else if (true) {
+            content = (
+                <>
+                    <Text category="h5" style={{ textAlign: 'center' }}>
+                        Status: {this.props.status}
+                    </Text>
+                    <Text category="p1" style={{ textAlign: 'left' }}>
+                        Please enter a result
+                    </Text>
+                    <RadioGroup
+                        selectedIndex={this.state.result}
+                        onChange={result => this.setState({ result })}
+                        style={{ marginTop: 10 }}
+                    >
+                        <Radio
+                            style={{ marginVertical: 5 }}
+                            text="Positive"
+                            textStyle={{ fontSize: 20 }}
+                            status="danger"
+                        />
+                        <Radio
+                            style={{ marginVertical: 5 }}
+                            text="Negative"
+                            textStyle={{ fontSize: 20 }}
+                            status="success"
+                        />
+                        <Radio
+                            style={{ marginVertical: 5 }}
+                            text="Inconclusive"
+                            textStyle={{ fontSize: 20 }}
+                            status="info"
+                        />
+                    </RadioGroup>
+                </>
+            );
+        }
+        return content;
+    }
 
     render() {
         return (
@@ -70,7 +146,7 @@ class ScanScreen extends React.Component {
 
                 <View style={{ top: 40, left: 20, position: 'absolute' }}>
                     <Button
-                        onPress={() => this.props.navigation.goBack()}
+                        onPress={this.goBack}
                         appearance="ghost"
                         size="giant"
                         icon={style => (
@@ -96,7 +172,7 @@ class ScanScreen extends React.Component {
                     <Text style={{ color: 'white', textAlign: 'center', margin: 10 }} category="h6">
                         {this.props.route.params.text}
                     </Text>
-                    {this.props.route.params.action == 'r' ? null : (
+                    {this.props.route.params.action == 'lr' && true ? null : (
                         <Button onPress={this.onButtonPress}>
                             Submit {this.state.number} Scans
                         </Button>
@@ -114,49 +190,39 @@ class ScanScreen extends React.Component {
                             backgroundColor: 'white',
                             borderRadius: 12,
                             padding: 10,
-                            alignContent: 'center'
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
                         }}
                     >
-                        <Text category="h3" status="primary" style={{ textAlign: 'center' }}>
-                            Test Kit {this.state.test}
-                        </Text>
-                        <Text category="p1" style={{ textAlign: 'left' }}>
-                            Please enter a result
-                        </Text>
-                        <RadioGroup
-                            selectedIndex={this.state.result}
-                            onChange={result => this.setState({ result })}
-                            style={{ marginTop: 10 }}
-                        >
-                            <Radio
-                                style={{ marginVertical: 5 }}
-                                text="Positive"
-                                textStyle={{ fontSize: 20 }}
-                                status="danger"
-                            />
-                            <Radio
-                                style={{ marginVertical: 5 }}
-                                text="Negative"
-                                textStyle={{ fontSize: 20 }}
-                                status="success"
-                            />
-                        </RadioGroup>
-                        <View
+                        <View>
+                            <Text category="h3" status="primary" style={{ textAlign: 'center' }}>
+                                Success!
+                            </Text>
+                            <Text category="h6" style={{ textAlign: 'center' }}>
+                                Scanned Test {this.state.test}
+                            </Text>
+                            {this.renderInModal()}
+                            <Text category="h6" status="danger" style={{ textAlign: 'center' }}>
+                                {this.state.error}
+                            </Text>
+                        </View>
+
+                        <ButtonGroup
                             style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                marginTop: 10
+                                margin: 10
                             }}
+                            appearance="outline"
+                            status="primary"
                         >
                             <Button
                                 onPress={() => this.setState({ scanning: true, showModal: '' })}
-                                style={{ borderRadius: 5 }}
-                                status="danger"
                             >
                                 Cancel
                             </Button>
-                            <Button style={{ borderRadius: 5 }}>Submit</Button>
-                        </View>
+                            <Button onPress={this.onButtonPress}>
+                                {this.state.submitLoading ? 'Processing' : 'Submit'}
+                            </Button>
+                        </ButtonGroup>
                     </View>
                 </Modal>
             </View>

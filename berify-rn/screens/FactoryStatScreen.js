@@ -15,10 +15,13 @@ import axios from 'axios';
 
 class FactoryStatScreen extends React.Component {
     componentDidMount = async () => {
+        console.log('componentdidmount');
+
         const token = await AsyncStorage.getItem('jwtToken');
         axios.defaults.headers.common['Authorization'] = token;
 
         const { data } = await axios.get(`${SERVER_URL}/api/test/exports`);
+        console.log(data);
         this.setState({ exports: data.exports });
     };
 
@@ -27,13 +30,6 @@ class FactoryStatScreen extends React.Component {
     };
 
     renderData = () => {
-        const dummyData = [
-            { date: 'March 14, 2020', num: 189 },
-            { date: 'March 13, 2020', num: 76 },
-            { date: 'March 12, 2020', num: 72 },
-            { date: 'March 11, 2020', num: 0 }
-        ];
-
         const bubbles = this.state.exports.map(item => {
             return (
                 <View
@@ -57,6 +53,30 @@ class FactoryStatScreen extends React.Component {
                 </View>
             );
         });
+
+        if (bubbles.length == 0) {
+            bubbles[0] = (
+                <View
+                    style={{
+                        borderWidth: 3,
+                        borderRadius: 8,
+                        borderStyle: 'solid',
+                        borderColor: '#F2F2F2',
+                        marginBottom: 5,
+                        width: '100%',
+                        padding: 5
+                    }}
+                    key={'blank'}
+                >
+                    <Text style={{ color: `#656565` }} category="c1">
+                        {'No Date'}
+                    </Text>
+                    <Text style={{ color: `#2B4899` }} category="h3">
+                        No Data Reported
+                    </Text>
+                </View>
+            );
+        }
 
         bubbles.push(
             <>
@@ -139,7 +159,4 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(
-    mapStateToProps,
-    { logoutUser }
-)(FactoryStatScreen);
+export default connect(mapStateToProps, { logoutUser })(FactoryStatScreen);

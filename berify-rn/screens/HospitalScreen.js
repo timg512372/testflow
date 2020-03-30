@@ -56,7 +56,7 @@ class HospitalScreen extends React.Component {
                     appearance="outline"
                     onPress={() =>
                         this.props.navigation.push('Scan', {
-                            action: '',
+                            action: 'ha',
                             text: 'Scanning kits arriving at hospital'
                         })
                     }
@@ -73,7 +73,7 @@ class HospitalScreen extends React.Component {
                     appearance="outline"
                     onPress={() =>
                         this.props.navigation.push('Scan', {
-                            action: '',
+                            action: 'hs',
                             text: 'Scanning kits that just received samples'
                         })
                     }
@@ -90,7 +90,7 @@ class HospitalScreen extends React.Component {
                     appearance="outline"
                     onPress={() =>
                         this.props.navigation.push('Scan', {
-                            action: '',
+                            action: 'hl',
                             text: 'Scanning kits leaving the hospital'
                         })
                     }

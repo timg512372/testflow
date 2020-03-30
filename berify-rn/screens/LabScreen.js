@@ -50,7 +50,7 @@ class LabScreen extends React.Component {
                     appearance="outline"
                     onPress={() =>
                         this.props.navigation.push('Scan', {
-                            action: '',
+                            action: 'la',
                             text: 'Scanning kits arriving at the lab'
                         })
                     }
@@ -67,7 +67,7 @@ class LabScreen extends React.Component {
                     appearance="outline"
                     onPress={() =>
                         this.props.navigation.push('Scan', {
-                            action: 'r',
+                            action: 'lr',
                             text: 'Scanning kits to record results'
                         })
                     }
