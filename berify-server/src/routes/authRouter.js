@@ -81,6 +81,12 @@ router.post("/register", async (req, res) => {
     });
   }
 
+  if (req.body.role == "fda") {
+    await testFactoryInstance.methods.becomeFDA(address).send({
+      from: loomAddress
+    });
+  }
+
   const newUser = new User({
     institution: req.body.institution,
     userName: req.body.userName,

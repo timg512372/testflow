@@ -479,4 +479,127 @@ router.post(
   }
 );
 
+router.post(
+  "/defaultCheck",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const privateKey = CryptoUtils.generatePrivateKey();
+    const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
+    const address = LocalAddress.fromPublicKey(publicKey).toString();
+
+    let client = new Client(
+      "extdev-plasma-us1",
+      "wss://extdev-plasma-us1.dappchains.com/websocket",
+      "wss://extdev-plasma-us1.dappchains.com/queryws"
+    );
+
+    client.txMiddleware = [
+      new NonceTxMiddleware(publicKey, client),
+      new SignedTxMiddleware(privateKey)
+    ];
+
+    let web3 = new Web3(new LoomProvider(client, privateKey));
+    let testFactoryInstance = new web3.eth.Contract(
+      TestFactory.abi,
+      TestFactory.networks["9545242630824"].address
+    );
+
+    const test = await testFactoryInstance.methods
+      .checkTest(req.body.testId)
+      .call({ from: address });
+
+    res.json({ test });
+  }
+);
+
+router.get(
+  "/manufacturers",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const user = await User.findOne({ userName: req.user.userName }).lean();
+    if (!user) {
+      return res.sendStatus(400);
+    }
+
+    const privateKey = new Uint8Array(JSON.parse("[" + user.privateKey + "]"));
+    const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
+    const address = LocalAddress.fromPublicKey(publicKey).toString();
+
+    let client = new Client(
+      "extdev-plasma-us1",
+      "wss://extdev-plasma-us1.dappchains.com/websocket",
+      "wss://extdev-plasma-us1.dappchains.com/queryws"
+    );
+
+    client.txMiddleware = [
+      new NonceTxMiddleware(publicKey, client),
+      new SignedTxMiddleware(privateKey)
+    ];
+
+    let web3 = new Web3(new LoomProvider(client, privateKey));
+
+    let testFactoryInstance = new web3.eth.Contract(
+      TestFactory.abi,
+      TestFactory.networks["9545242630824"].address
+    );
+
+    const manufacturers = await User.find({ role: "factory" }).lean();
+
+    const sort = manufacturers.map(async (factory, index) => {
+      const certification = await testFactoryInstance.methods
+        .checkCertification(factory.address)
+        .call({ from: address });
+
+      manufacturers[index].certification = certification;
+    });
+
+    await Promise.all(sort);
+
+    res.json({ manufacturers });
+  }
+);
+
+router.post(
+  "/certify",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const user = await User.findOne({ userName: req.user.userName }).lean();
+    if (!user) {
+      return res.sendStatus(400);
+    }
+
+    const privateKey = new Uint8Array(JSON.parse("[" + user.privateKey + "]"));
+    const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
+    const address = LocalAddress.fromPublicKey(publicKey).toString();
+
+    let client = new Client(
+      "extdev-plasma-us1",
+      "wss://extdev-plasma-us1.dappchains.com/websocket",
+      "wss://extdev-plasma-us1.dappchains.com/queryws"
+    );
+
+    client.txMiddleware = [
+      new NonceTxMiddleware(publicKey, client),
+      new SignedTxMiddleware(privateKey)
+    ];
+
+    let web3 = new Web3(new LoomProvider(client, privateKey));
+
+    let testFactoryInstance = new web3.eth.Contract(
+      TestFactory.abi,
+      TestFactory.networks["9545242630824"].address
+    );
+
+    try {
+      await testFactoryInstance.methods.certifyFactory(req.body.factory).send({
+        from: address
+      });
+    } catch (e) {
+      return res.sendStatus(400);
+    }
+
+    res.sendStatus(200);
+  }
+);
+
 module.exports = router;
