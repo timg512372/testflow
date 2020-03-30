@@ -480,48 +480,44 @@ router.post(
   }
 );
 
-router.post(
-  "/defaultCheck",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    const privateKey = CryptoUtils.generatePrivateKey();
-    const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
-    const address = LocalAddress.fromPublicKey(publicKey).toString();
+router.post("/defaultCheck", async (req, res) => {
+  const privateKey = CryptoUtils.generatePrivateKey();
+  const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
+  const address = LocalAddress.fromPublicKey(publicKey).toString();
 
-    let client = new Client(
-      "extdev-plasma-us1",
-      "wss://extdev-plasma-us1.dappchains.com/websocket",
-      "wss://extdev-plasma-us1.dappchains.com/queryws"
-    );
+  let client = new Client(
+    "extdev-plasma-us1",
+    "wss://extdev-plasma-us1.dappchains.com/websocket",
+    "wss://extdev-plasma-us1.dappchains.com/queryws"
+  );
 
-    client.txMiddleware = [
-      new NonceTxMiddleware(publicKey, client),
-      new SignedTxMiddleware(privateKey)
-    ];
+  client.txMiddleware = [
+    new NonceTxMiddleware(publicKey, client),
+    new SignedTxMiddleware(privateKey)
+  ];
 
-    let web3 = new Web3(new LoomProvider(client, privateKey));
-    let testFactoryInstance = new web3.eth.Contract(
-      TestFactory.abi,
-      TestFactory.networks["9545242630824"].address
-    );
+  let web3 = new Web3(new LoomProvider(client, privateKey));
+  let testFactoryInstance = new web3.eth.Contract(
+    TestFactory.abi,
+    TestFactory.networks["9545242630824"].address
+  );
 
-    const test = await testFactoryInstance.methods
-      .checkTest(req.body.testId)
-      .call({ from: address });
+  const test = await testFactoryInstance.methods
+    .checkTest(req.body.testId)
+    .call({ from: address });
 
-    const factory = await User.findOne({
-      address: test.factory.toLowerCase()
-    }).lean();
-    const authority = await User.findOne({
-      address: test.authority.toLowerCase()
-    }).lean();
+  const factory = await User.findOne({
+    address: test.factory.toLowerCase()
+  }).lean();
+  const authority = await User.findOne({
+    address: test.authority.toLowerCase()
+  }).lean();
 
-    test.factoryUser = factory;
-    test.authorityUser = authority;
+  test.factoryUser = factory;
+  test.authorityUser = authority;
 
-    res.json({ test });
-  }
-);
+  res.json({ test });
+});
 
 router.get(
   "/manufacturers",
