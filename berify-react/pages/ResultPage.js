@@ -11,17 +11,24 @@ class ResultPage extends React.Component {
 
     state = {
         testId: '',
-        test: {}
+        test: {},
+        loading: false,
+        error: ''
     };
 
     check = async () => {
-        axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-        const { data } = await axios.post(`${process.env.SERVER_URL}/api/test/defaultCheck`, {
-            testId: this.state.testId
-        });
-        this.setState({ test: data.test });
-
-        console.log(data.test);
+        this.setState({ loading: true });
+        try {
+            axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
+            const { data } = await axios.post(`${process.env.SERVER_URL}/api/test/defaultCheck`, {
+                testId: this.state.testId
+            });
+            console.log(data.test);
+            this.setState({ test: data.test, loading: false });
+        } catch (e) {
+            console.log(e);
+            this.setState({ loading: false, error: e.message });
+        }
     };
 
     render() {
@@ -47,7 +54,12 @@ class ResultPage extends React.Component {
                         onChange={event => this.setState({ testId: event.target.value })}
                         style={{ width: '70vw' }}
                     ></Input>
-                    <Button type="primary" onClick={this.check} style={{ marginLeft: '20px' }}>
+                    <Button
+                        type="primary"
+                        onClick={this.check}
+                        style={{ marginLeft: '20px' }}
+                        loading={this.state.loading}
+                    >
                         Submit
                     </Button>
                 </div>
@@ -64,7 +76,7 @@ class ResultPage extends React.Component {
                         <h3>{this.state.test.date}</h3>
 
                         <h2>Result</h2>
-                        <h3>{this.state.test.result ? 'Positive' : 'Negative'}</h3>
+                        <h3>{this.state.test.result}</h3>
                     </Card>
                 ) : null}
             </div>
@@ -77,7 +89,4 @@ const mapStateToProps = state => {
     return { user, isAuthenticated };
 };
 
-export default connect(
-    mapStateToProps,
-    null
-)(ResultPage);
+export default connect(mapStateToProps, null)(ResultPage);

@@ -15,96 +15,98 @@ class VerifyPage extends Component {
 
     state = {
         text: '',
-        loaded: false
+        loaded: false,
+        factories: ''
     };
 
     locationData = {};
 
     async componentDidMount() {
-        let noLocationData = dummyData.no.map(async factory => {
-            let { data } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-                params: {
-                    address: factory.location,
-                    key: process.env.GOOGLE_MAPS_API_KEY
-                }
-            });
-            if (data.results[0]) {
-                return data.results[0].geometry.location;
-            } else return { lat: 0, lng: 0 };
+        this.setState({ loaded: false });
+        axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
+        let { data } = await axios.get(`${process.env.SERVER_URL}/api/test/manufacturers`);
+
+        let promises = data.manufacturers.map(async factory => {
+            let response = await fetch(
+                `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+                    factory.location
+                )}&key=${process.env.GOOGLE_MAPS_API_KEY}`
+            );
+            let json = await response.json();
+            factory.location = json.results[0]
+                ? json.results[0].geometry.location
+                : { lat: 0, lng: 0 };
+            return factory;
         });
 
-        let yesLocationData = dummyData.yes.map(async factory => {
-            let { data } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-                params: {
-                    address: factory.location,
-                    key: process.env.GOOGLE_MAPS_API_KEY
-                }
-            });
-            if (data.results[0]) {
-                return data.results[0].geometry.location;
-            } else return { lat: 0, lng: 0 };
-        });
-
-        this.locationData.no = await Promise.all(noLocationData);
-        this.locationData.yes = await Promise.all(yesLocationData);
-
-        this.setState({ loaded: true });
-        console.log(this.locationData);
+        let factories = await Promise.all(promises);
+        console.log(factories);
+        this.setState({ factories, loaded: true });
     }
 
+    verify = async factory => {
+        await axios.post(`${process.env.SERVER_URL}/api/test/certify`, {
+            factory: factory.address
+        });
+        this.componentDidMount();
+    };
+
     renderCards = (factories, verified) => {
+        if (!this.state.loaded) {
+            return <h3> Loading </h3>;
+        }
         return (
             <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row' }}>
-                {factories.map((factory, index) => (
-                    <Card
-                        style={{
-                            width: '20vw',
-                            margin: '1vw',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center'
-                        }}
-                        actions={[
+                {factories
+                    .filter(factory => factory.certification == verified)
+                    .map((factory, index) => (
+                        <Card
+                            style={{
+                                width: '20vw',
+                                margin: '1vw',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center'
+                            }}
+                            actions={[
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                    onClick={!verified ? () => this.verify(factory) : null}
+                                >
+                                    {!verified ? (
+                                        <>
+                                            <CheckSquareOutlined />
+                                            &ensp;Verify
+                                        </>
+                                    ) : (
+                                        <>
+                                            <CloseSquareOutlined />
+                                            &ensp;Remove Verification
+                                        </>
+                                    )}
+                                </div>
+                            ]}
+                        >
+                            <h1 style={{ textAlign: 'center' }}>{factory.institution}</h1>
                             <div
                                 style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
+                                    width: '18vw',
+                                    height: '11vw'
                                 }}
                             >
-                                {!verified ? (
-                                    <>
-                                        <CheckSquareOutlined />
-                                        &ensp;Verify
-                                    </>
-                                ) : (
-                                    <>
-                                        <CloseSquareOutlined />
-                                        &ensp;Remove Verification
-                                    </>
-                                )}
-                            </div>
-                        ]}
-                    >
-                        <h1 style={{ textAlign: 'center' }}>{factory.name}</h1>
-                        <div
-                            style={{
-                                width: '18vw',
-                                height: '11vw'
-                            }}
-                        >
-                            {this.state.loaded ? (
                                 <GoogleMapReact
                                     bootstrapURLKeys={{ key: process.env.GOOGLE_MAPS_API_KEY }}
-                                    defaultCenter={
-                                        this.locationData[verified ? 'yes' : 'no'][index]
-                                    }
+                                    defaultCenter={factory.location}
                                     defaultZoom={6}
                                 >
                                     <Badge
-                                        lat={this.locationData[verified ? 'yes' : 'no'][index].lat}
-                                        lng={this.locationData[verified ? 'yes' : 'no'][index].lng}
+                                        lat={factory.location.lat}
+                                        lng={factory.location.lng}
                                         count={
                                             <DownCircleFilled
                                                 style={{
@@ -114,12 +116,9 @@ class VerifyPage extends Component {
                                         }
                                     />
                                 </GoogleMapReact>
-                            ) : (
-                                'Loading Map...'
-                            )}
-                        </div>
-                    </Card>
-                ))}
+                            </div>
+                        </Card>
+                    ))}
             </div>
         );
     };
@@ -154,7 +153,7 @@ class VerifyPage extends Component {
                         }}
                     >
                         <h2>Not Approved Manufacturers</h2>
-                        {this.renderCards(dummyData.no, false)}
+                        {this.renderCards(this.state.factories, false)}
                     </div>
                     <div
                         style={{
@@ -165,48 +164,13 @@ class VerifyPage extends Component {
                         }}
                     >
                         <h2>Approved Manufacturers</h2>
-                        {this.renderCards(dummyData.yes, true)}
+                        {this.renderCards(this.state.factories, true)}
                     </div>
                 </div>
             </div>
         );
     }
 }
-
-const dummyData = {
-    no: [
-        {
-            name: 'Bad Factory',
-            location: 'Baltimore, MD'
-        },
-        {
-            name: 'Bad Factory',
-            location: 'Washington, DC'
-        },
-        {
-            name: 'Bad Factory',
-            location: 'Irvine, CA'
-        },
-        {
-            name: 'Bad Factory',
-            location: 'New York, NY'
-        },
-        {
-            name: 'Bad Factory',
-            location: 'Seattle, WA'
-        },
-        {
-            name: 'Bad Factory',
-            location: 'Chicago, IL'
-        }
-    ],
-    yes: [
-        {
-            name: 'Good Factory',
-            location: 'San Francisco, CA'
-        }
-    ]
-};
 
 const mapStateToProps = state => {
     const { user, isAuthenticated, error } = state.auth;
