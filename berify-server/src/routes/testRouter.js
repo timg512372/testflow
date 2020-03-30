@@ -603,4 +603,153 @@ router.post(
   }
 );
 
+router.get(
+  "/track",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const user = await User.findOne({ userName: req.user.userName }).lean();
+    if (!user) {
+      return res.sendStatus(400);
+    }
+
+    const privateKey = new Uint8Array(JSON.parse("[" + user.privateKey + "]"));
+    const publicKey = CryptoUtils.publicKeyFromPrivateKey(privateKey);
+    const address = LocalAddress.fromPublicKey(publicKey).toString();
+
+    let client = new Client(
+      "extdev-plasma-us1",
+      "wss://extdev-plasma-us1.dappchains.com/websocket",
+      "wss://extdev-plasma-us1.dappchains.com/queryws"
+    );
+
+    client.txMiddleware = [
+      new NonceTxMiddleware(publicKey, client),
+      new SignedTxMiddleware(privateKey)
+    ];
+
+    let web3 = new Web3(new LoomProvider(client, privateKey));
+
+    let testFactoryInstance = new web3.eth.Contract(
+      TestFactory.abi,
+      TestFactory.networks["9545242630824"].address
+    );
+
+    const totalSupply = await testFactoryInstance.methods.totalSupply().call({
+      from: address
+    });
+
+    const tests = Array.from({ length: totalSupply });
+
+    let tested = 0,
+      inTransit = 0;
+
+    const factories = await User.find({ role: "factory" }).lean();
+    const hospitals = await User.find({ role: "hospital" }).lean();
+    const labs = await User.find({ role: "lab" }).lean();
+
+    const factoriesQuery = factories.map(async (factory, index) => {
+      let produced = 0;
+      const batches = await Batch.find({ factoryId: factory._id });
+      const exports = await Export.find({ factoryId: factory._id });
+      for (let i = 0; i < batches.length; i++) {
+        produced += batches[i].quantity;
+      }
+
+      factories[index].produced = produced;
+      factories[index].shipped = exports.length;
+      factories[index].inTransit = 0;
+      factories[index].inStock = 0;
+    });
+
+    await Promise.all(factoriesQuery);
+
+    const hospitalsQuery = hospitals.map(async (hospital, index) => {
+      const imports = await Import.find({ hospitalId: hospital._id });
+      const exports = await HospitalExport.find({ hospitalId: hospital._id });
+
+      hospitals[index].received = imports.length;
+      hospitals[index].shipped = exports.length;
+      hospitals[index].inTransit = 0;
+      hospitals[index].inStock = 0;
+    });
+
+    await Promise.all(hospitalsQuery);
+
+    const labsQuery = labs.map(async (lab, index) => {
+      const imports = await LabImport.find({ labId: lab._id });
+      labs[index].received = imports.length;
+      labs[index].tested = 0;
+      labs[index].inStock = 0;
+    });
+
+    await Promise.all(labsQuery);
+
+    const query = tests.map(async (test, id) => {
+      const testData = await testFactoryInstance.methods.checkTest(id).call({
+        from: address
+      });
+
+      if (testData.tested) {
+        tested++;
+      }
+
+      if (testData.inTransit) {
+        inTransit++;
+      }
+
+      for (let i = 0; i < factories.length; i++) {
+        if (
+          testData.authority.toLowerCase() == factories[i].address.toLowerCase()
+        ) {
+          if (testData.inTransit) {
+            factories[i].inTransit++;
+          } else {
+            factories[i].inStock++;
+          }
+
+          break;
+        }
+      }
+
+      for (let i = 0; i < hospitals.length; i++) {
+        if (
+          testData.authority.toLowerCase() == hospitals[i].address.toLowerCase()
+        ) {
+          if (testData.inTransit) {
+            hospitals[i].inTransit++;
+          } else {
+            hospitals[i].inStock++;
+          }
+
+          break;
+        }
+      }
+
+      for (let i = 0; i < labs.length; i++) {
+        if (testData.authority.toLowerCase() == labs[i].address.toLowerCase()) {
+          if (testData.tested) {
+            labs[i].tested++;
+          } else {
+            labs[i].inStock++;
+          }
+
+          break;
+        }
+      }
+    });
+
+    await Promise.all(query);
+
+    res.json({
+      tested,
+      stock: totalSupply - tested,
+      inTransit,
+      factories,
+      hospitals,
+      labs,
+      totalSupply
+    });
+  }
+);
+
 module.exports = router;
