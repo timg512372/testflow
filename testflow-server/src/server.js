@@ -30,7 +30,7 @@ app.use(passport.initialize());
 
 app.get("/", (req, res) => {
   res.status(200);
-  res.send("Berify API");
+  res.send("TestFlow API");
 });
 
 const server = http.createServer(app);
