@@ -13,6 +13,9 @@ import axios from 'axios';
 import { SERVER_URL } from '../dotenv.json';
 
 class HospitalScreen extends React.Component {
+    state = {
+        imports: []
+    };
     componentDidMount = async () => {
         const token = await AsyncStorage.getItem('jwtToken');
         axios.defaults.headers.common['Authorization'] = token;
@@ -21,11 +24,8 @@ class HospitalScreen extends React.Component {
         this.setState({ imports: data.imports });
     };
 
-    state = {
-        imports: []
-    };
-
     renderData = () => {
+        console.log(this.state.imports);
         return (
             <>
                 <View
@@ -41,7 +41,9 @@ class HospitalScreen extends React.Component {
                     key="inv"
                 >
                     <Text style={{ color: `#2B4899` }} category="h3">
-                        {120} Kits in Inventory
+                        {this.state.imports
+                            ? this.state.imports.length + ' Kits in Inventory'
+                            : 'Loading'}
                     </Text>
                 </View>
                 <Button
@@ -139,7 +141,4 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(
-    mapStateToProps,
-    { logoutUser }
-)(HospitalScreen);
+export default connect(mapStateToProps, { logoutUser })(HospitalScreen);
