@@ -9,6 +9,7 @@
         "orientation": "portrait",
         "icon": "./assets/images/icon.png",
         "scheme": "myapp",
+        "description": "TestFlow is an application that uses the blockchain to track each test kit, allowing patients,  doctors, labs and the FDA to monitor the test kit’s location, verify authenticity, and view the results.",
         "splash": {
             "image": "./assets/images/splash.png",
             "resizeMode": "contain",
