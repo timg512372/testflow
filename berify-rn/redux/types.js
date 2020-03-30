@@ -9,3 +9,4 @@ export const CHANGE_L_USER_NAME = 'change-l-user-name';
 export const CHANGE_L_PASSWORD = 'change-l-password';
 export const GET_ERRORS = 'get-l-errors';
 export const CHANGE_PAGE = 'change-page';
+export const SET_LOADING = 'set-loading';

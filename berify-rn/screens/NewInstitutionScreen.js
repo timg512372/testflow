@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Image, View, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
-import { Text, Input, Button, Select } from '@ui-kitten/components';
+import { Text, Input, Button, Select, Spinner } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
     widthPercentageToDP as vw,
@@ -106,7 +106,8 @@ class NewInstitutionScreen extends React.Component {
                             style={{
                                 view: 1,
                                 flexDirection: 'row',
-                                justifyContent: 'space-around'
+                                justifyContent: 'space-between',
+                                marginHorizontal: 30
                             }}
                         >
                             <Button
@@ -126,6 +127,7 @@ class NewInstitutionScreen extends React.Component {
                             >
                                 Continue
                             </Button>
+                            {this.props.auth.loading ? <Spinner /> : null}
                             <Button
                                 size="small"
                                 appearance="ghost"
