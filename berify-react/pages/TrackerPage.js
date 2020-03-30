@@ -233,6 +233,42 @@ class TrackerPage extends Component {
         return markers;
     }
 
+    getPieData = () => {
+        const thresholds = [
+            {
+                name: 'None',
+                value: 0
+            },
+            {
+                name: 'Critically Low',
+                value: 1
+            },
+            {
+                name: 'Low',
+                value: 2
+            },
+            {
+                name: 'Adequate',
+                value: 3
+            },
+            {
+                name: 'Above Average',
+                value: 4
+            },
+            {
+                name: 'High',
+                value: 5
+            }
+        ];
+
+        const data = thresholds.map(key => ({ name: key.name, value: 1 }));
+        this.state.hospitals.forEach(hospital => {
+            data[hospital.inStock].value++;
+        });
+
+        return data;
+    };
+
     render() {
         return (
             <div
@@ -281,6 +317,7 @@ class TrackerPage extends Component {
                                 }}
                             >
                                 <h2> Test Kit Distribution over Time </h2>
+                                <h6> (Hypothetical) </h6>
                                 <LineChart
                                     width={730}
                                     height={250}
@@ -299,9 +336,9 @@ class TrackerPage extends Component {
 
                                 <h2> Testing Center Inventory </h2>
 
-                                <PieChart width={730} height={250}>
+                                <PieChart width={730} height={300}>
                                     <Pie
-                                        data={data02}
+                                        data={this.getPieData()}
                                         dataKey="value"
                                         nameKey="name"
                                         cx="50%"
@@ -323,75 +360,91 @@ class TrackerPage extends Component {
         );
     }
 }
-const data02 = [
-    {
-        name: 'None',
-        value: 2400
-    },
-    {
-        name: 'Critically Low',
-        value: 3908
-    },
-    {
-        name: 'Low',
-        value: 4567
-    },
-    {
-        name: 'Adequate',
-        value: 1398
-    },
-    {
-        name: 'Above Average',
-        value: 1398
-    },
-    {
-        name: 'High',
-        value: 9800
-    }
-];
 
 const data = [
     {
         name: '3/3/20',
-        Used: 4000,
-        Produced: 2400,
-        Processed: 2400
-    },
-    {
-        name: '3/4/20',
-        Used: 3000,
-        Produced: 1398,
-        Processed: 2210
+        Used: 4,
+        Produced: 2.4,
+        Processed: 2.4
     },
     {
         name: '3/5/20',
-        Used: 2000,
-        Produced: 9800,
-        Processed: 2290
-    },
-    {
-        name: '3/6/20',
-        Used: 2780,
-        Produced: 3908,
-        Processed: 2000
+        Used: 3,
+        Produced: 1.4,
+        Processed: 2.2
     },
     {
         name: '3/7/20',
-        Used: 1890,
-        Produced: 4800,
-        Processed: 2181
-    },
-    {
-        name: '3/8/20',
-        Used: 2390,
-        Produced: 3800,
-        Processed: 2500
+        Used: 2.2,
+        Produced: 9,
+        Processed: 2.2
     },
     {
         name: '3/9/20',
-        Used: 3490,
-        Produced: 4300,
-        Processed: 2100
+        Used: 2.7,
+        Produced: 3.9,
+        Processed: 2
+    },
+    {
+        name: '3/11/20',
+        Used: 1.9,
+        Produced: 4.8,
+        Processed: 2.2
+    },
+    {
+        name: '3/13/20',
+        Used: 2.4,
+        Produced: 3.8,
+        Processed: 2.5
+    },
+    {
+        name: '3/15/20',
+        Used: 3.5,
+        Produced: 4.3,
+        Processed: 2.1
+    },
+    {
+        name: '3/17/20',
+        Used: 4,
+        Produced: 2.4,
+        Processed: 2.4
+    },
+    {
+        name: '3/19/20',
+        Used: 5.7,
+        Produced: 1.8,
+        Processed: 2.2
+    },
+    {
+        name: '3/21/20',
+        Used: 3.8,
+        Produced: 7,
+        Processed: 2.2
+    },
+    {
+        name: '3/23/20',
+        Used: 2.7,
+        Produced: 3.9,
+        Processed: 6.8
+    },
+    {
+        name: '3/25/20',
+        Used: 1.9,
+        Produced: 1.4,
+        Processed: 6.1
+    },
+    {
+        name: '3/27/20',
+        Used: 2.4,
+        Produced: 3.8,
+        Processed: 2.5
+    },
+    {
+        name: '3/29/20',
+        Used: 3.5,
+        Produced: 4.3,
+        Processed: 2.1
     }
 ];
 
