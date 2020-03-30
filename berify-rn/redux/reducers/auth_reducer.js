@@ -12,7 +12,8 @@ const INITIAL_STATE = {
     lUserName: '',
     lPassword: '',
     error: '',
-    page: ''
+    page: '',
+    loading: ''
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -42,7 +43,8 @@ export default function(state = INITIAL_STATE, action) {
                     Object.keys(action.payload).length === 0 &&
                     action.payload.constructor === Object
                 ),
-                user: action.payload
+                user: action.payload,
+                loading: false
             };
         }
 
@@ -61,13 +63,16 @@ export default function(state = INITIAL_STATE, action) {
         }
 
         case types.GET_ERRORS: {
-            return { ...state, error: action.payload };
+            return { ...state, error: action.payload, loading: false };
         }
 
         case types.CHANGE_PAGE: {
             return { ...state, page: action.payload };
         }
 
+        case types.SET_LOADING: {
+            return { ...state, loading: action.payload };
+        }
         default:
             return state;
     }

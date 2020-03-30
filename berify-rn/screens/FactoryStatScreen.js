@@ -20,7 +20,7 @@ class FactoryStatScreen extends React.Component {
         const token = await AsyncStorage.getItem('jwtToken');
         axios.defaults.headers.common['Authorization'] = token;
 
-        const { data } = await axios.get(`${SERVER_URL}/api/test/exports`);
+        const { data } = await axios.get(`${SERVER_URL}/api/test/factoryExports`);
         console.log(data);
         this.setState({ exports: data.exports });
     };
@@ -30,7 +30,8 @@ class FactoryStatScreen extends React.Component {
     };
 
     renderData = () => {
-        const bubbles = this.state.exports.map(item => {
+        console.log(this.state.exports);
+        const bubbles = this.state.exports.map((item, index) => {
             return (
                 <View
                     style={{
@@ -42,13 +43,13 @@ class FactoryStatScreen extends React.Component {
                         width: '100%',
                         padding: 5
                     }}
-                    key={item.date}
+                    key={index}
                 >
                     <Text style={{ color: `#656565` }} category="c1">
                         {item.date}
                     </Text>
                     <Text style={{ color: `#2B4899` }} category="h3">
-                        {item.quantity} Test Kits Exported
+                        {this.state.exports.length} Test Kits Exported
                     </Text>
                 </View>
             );
@@ -78,7 +79,8 @@ class FactoryStatScreen extends React.Component {
             );
         }
 
-        bubbles.push(
+        const trimmedBubbles = [bubbles[0]];
+        trimmedBubbles.push(
             <>
                 <Button
                     style={{
@@ -90,7 +92,7 @@ class FactoryStatScreen extends React.Component {
                     appearance="outline"
                     onPress={() =>
                         this.props.navigation.push('Scan', {
-                            action: 'f',
+                            action: 'fl',
                             text: 'Scanning Boxes Leaving Factory'
                         })
                     }
@@ -112,7 +114,7 @@ class FactoryStatScreen extends React.Component {
             </>
         );
 
-        return bubbles;
+        return trimmedBubbles;
     };
 
     render() {

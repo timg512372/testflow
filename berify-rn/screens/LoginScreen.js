@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { Input, Button, Text } from '@ui-kitten/components';
+import { Input, Button, Text, Spinner } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import {
@@ -60,7 +60,8 @@ class LoginScreen extends React.Component {
                             style={{
                                 view: 1,
                                 flexDirection: 'row',
-                                justifyContent: 'space-around'
+                                justifyContent: 'space-between',
+                                marginHorizontal: 30
                             }}
                         >
                             <Button
@@ -76,6 +77,7 @@ class LoginScreen extends React.Component {
                             >
                                 Continue
                             </Button>
+                            {this.props.auth.loading ? <Spinner /> : null}
                             <Button
                                 size="small"
                                 appearance="ghost"

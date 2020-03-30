@@ -69,8 +69,9 @@ export const handleRegister = (
     location,
     navigation
 ) => async dispatch => {
-    console.log(SERVER_URL);
     try {
+        dispatch(setLoading(true));
+
         console.log(institution, userName, password, password_confirm, role, location);
 
         const res = await axios({
@@ -103,6 +104,7 @@ export const handleRegister = (
 
 export const handleLogin = (userName, password, navigation) => async dispatch => {
     try {
+        dispatch(setLoading(true));
         const res = await axios({
             method: 'post',
             url: `${SERVER_URL}/api/auth/login`,
@@ -142,6 +144,13 @@ export const setCurrentUser = decoded => {
     return {
         type: types.SET_CURRENT_USER,
         payload: decoded
+    };
+};
+
+export const setLoading = loading => {
+    return {
+        type: types.SET_LOADING,
+        payload: loading
     };
 };
 
