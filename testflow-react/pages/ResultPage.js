@@ -119,6 +119,9 @@ class ResultPage extends React.Component {
                             )}
                         </h3>
 
+                        <h2 style={{ fontWeight: 'bold' }}>Is this test certified?</h2>
+                        <h3>{this.state.test.certified ? 'Yes' : 'No'}</h3>
+
                         <h2 style={{ fontWeight: 'bold' }}>What is the result of this test?</h2>
                         <h3>
                             {this.state.test.tested ? this.state.test.result : 'Awaiting Results'}
