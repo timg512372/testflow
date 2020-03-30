@@ -19,7 +19,6 @@ class ResultPage extends React.Component {
     check = async () => {
         this.setState({ loading: true });
         try {
-            axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
             const { data } = await axios.post(`${process.env.SERVER_URL}/api/test/defaultCheck`, {
                 testId: this.state.testId
             });
@@ -145,7 +144,4 @@ const mapStateToProps = state => {
     return { user, isAuthenticated };
 };
 
-export default connect(
-    mapStateToProps,
-    null
-)(ResultPage);
+export default connect(mapStateToProps, null)(ResultPage);
