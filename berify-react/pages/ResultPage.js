@@ -31,6 +31,41 @@ class ResultPage extends React.Component {
         }
     };
 
+    renderInstructions = result => {
+        if (result == 'positive') {
+            return (
+                <ul>
+                    <li>
+                        Seek medical treatment (make sure to call your hospital beforehand if you
+                        plan on going).
+                    </li>
+                    <li>Practice social distancing.</li>
+                    <li>Take precautions as not to infect others (wearing a mask).</li>
+                </ul>
+            );
+        }
+
+        if (result == 'negative') {
+            return (
+                <ul>
+                    <li>Practice social distancing.</li>
+                    <li>Support local businesses.</li>
+                    <li>Find ways of helping out hospitals.</li>
+                </ul>
+            );
+        }
+
+        if (result == 'inconclusive') {
+            return (
+                <ul>
+                    <li>Practice social distancing.</li>
+                    <li>Support local businesses.</li>
+                    <li>Find ways of helping out hospitals.</li>
+                </ul>
+            );
+        }
+    };
+
     render() {
         return (
             <div
@@ -66,19 +101,35 @@ class ResultPage extends React.Component {
 
                 {this.state.test.result ? (
                     <Card style={{ marginTop: '20px' }}>
-                        <h2>Factory</h2>
-                        <h3>{this.state.test.factory}</h3>
+                        <h2 style={{ fontWeight: 'bold' }}>Which factory made this?</h2>
+                        <h3>
+                            {this.state.test.factoryUser.institution} ({this.state.test.factory})
+                        </h3>
 
-                        <h2>Authority</h2>
-                        <h3>{this.state.test.authority}</h3>
+                        <h2 style={{ fontWeight: 'bold' }}>Where is the test now?</h2>
+                        <h3>
+                            {this.state.test.authorityUser.institution} ({this.state.test.authority}
+                            )
+                        </h3>
 
-                        <h2>Date</h2>
-                        <h3>{this.state.test.date}</h3>
+                        <h2 style={{ fontWeight: 'bold' }}>When was this test produced?</h2>
+                        <h3>
+                            {new Date(Number(this.state.test.date) * 1000).toLocaleDateString(
+                                'en-US'
+                            )}
+                        </h3>
 
-                        <h2>Result</h2>
+                        <h2 style={{ fontWeight: 'bold' }}>What is the result of this test?</h2>
                         <h3>
                             {this.state.test.tested ? this.state.test.result : 'Awaiting Results'}
                         </h3>
+
+                        {this.state.test.tested ? (
+                            <div>
+                                <h2 style={{ fontWeight: 'bold' }}>What should I do now?</h2>
+                                {this.renderInstructions(this.state.test.result)}
+                            </div>
+                        ) : null}
                     </Card>
                 ) : null}
             </div>

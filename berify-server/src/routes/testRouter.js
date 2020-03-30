@@ -509,6 +509,16 @@ router.post(
       .checkTest(req.body.testId)
       .call({ from: address });
 
+    const factory = await User.findOne({
+      address: test.factory.toLowerCase()
+    }).lean();
+    const authority = await User.findOne({
+      address: test.authority.toLowerCase()
+    }).lean();
+
+    test.factoryUser = factory;
+    test.authorityUser = authority;
+
     res.json({ test });
   }
 );
