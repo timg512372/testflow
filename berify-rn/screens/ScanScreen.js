@@ -44,6 +44,9 @@ class ScanScreen extends React.Component {
         } else {
             this.setState({ showModal: 'r', test: data, loading: true });
             try {
+                const token = await AsyncStorage.getItem('jwtToken');
+                axios.defaults.headers.common['Authorization'] = token;
+
                 const result = await axios.post(`${SERVER_URL}/api/test/check`, {
                     test: data
                 });
@@ -56,13 +59,27 @@ class ScanScreen extends React.Component {
     };
 
     onButtonPress = async () => {
-        console.log('pressed button');
         this.setState({ submitLoading: true });
+
+        let route = '';
+
+        if (this.props.route.params.action == 'fl') {
+            route = 'hospitalTransfer';
+        }
+
+        if (this.props.route.params.action == 'ha') {
+            route = 'hospitalObtain';
+        }
+
+        if (this.props.route.params.action == 'hl') {
+            route = 'labTransfer';
+        }
 
         try {
             const token = await AsyncStorage.getItem('jwtToken');
             axios.defaults.headers.common['Authorization'] = token;
-            await axios.post(`${SERVER_URL}/api/test/hospitalTransfer`, {
+
+            await axios.post(`${SERVER_URL}/api/test/${route}`, {
                 test: this.state.test
             });
             this.setState({ submitLoading: false, showModal: '' });
@@ -261,9 +278,6 @@ class ScanScreen extends React.Component {
                                 Scanned Test {this.state.test}
                             </Text>
                             {this.renderInModal()}
-                            <Text category="h6" status="danger" style={{ textAlign: 'center' }}>
-                                {this.state.error}
-                            </Text>
                         </View>
 
                         {this.state.loading || this.state.submitLoading ? <Spinner /> : null}

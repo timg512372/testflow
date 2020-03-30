@@ -15,13 +15,10 @@ import axios from 'axios';
 
 class FactoryStatScreen extends React.Component {
     componentDidMount = async () => {
-        console.log('componentdidmount');
-
         const token = await AsyncStorage.getItem('jwtToken');
         axios.defaults.headers.common['Authorization'] = token;
 
         const { data } = await axios.get(`${SERVER_URL}/api/test/factoryExports`);
-        console.log(data);
         this.setState({ exports: data.exports });
     };
 
@@ -161,4 +158,7 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(mapStateToProps, { logoutUser })(FactoryStatScreen);
+export default connect(
+    mapStateToProps,
+    { logoutUser }
+)(FactoryStatScreen);

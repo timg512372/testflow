@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, AsyncStorage } from 'react-native';
 import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh
@@ -9,8 +9,22 @@ import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
 
 import { logoutUser } from '../redux/actions';
 import { TOP } from '../assets/images';
+import axios from 'axios';
+import { SERVER_URL } from '../dotenv.json';
 
 class HospitalScreen extends React.Component {
+    componentDidMount = async () => {
+        const token = await AsyncStorage.getItem('jwtToken');
+        axios.defaults.headers.common['Authorization'] = token;
+
+        const { data } = await axios.get(`${SERVER_URL}/api/test/hospitalImports`);
+        this.setState({ imports: data.imports });
+    };
+
+    state = {
+        imports: []
+    };
+
     renderData = () => {
         return (
             <>
@@ -30,22 +44,6 @@ class HospitalScreen extends React.Component {
                         {120} Kits in Inventory
                     </Text>
                 </View>
-                <View
-                    style={{
-                        borderWidth: 3,
-                        borderRadius: 8,
-                        borderStyle: 'solid',
-                        borderColor: '#F2F2F2',
-                        marginBottom: 5,
-                        width: '100%',
-                        padding: 5
-                    }}
-                    key="send"
-                >
-                    <Text style={{ color: `#2B4899` }} category="h3">
-                        {80} Kits to Send to Labs
-                    </Text>
-                </View>
                 <Button
                     style={{
                         width: '100%',
@@ -62,23 +60,6 @@ class HospitalScreen extends React.Component {
                     }
                 >
                     Process Arriving Kits
-                </Button>
-                <Button
-                    style={{
-                        width: '100%',
-                        marginBottom: 10
-                    }}
-                    key="middle"
-                    size="giant"
-                    appearance="outline"
-                    onPress={() =>
-                        this.props.navigation.push('Scan', {
-                            action: 'hs',
-                            text: 'Scanning kits that just received samples'
-                        })
-                    }
-                >
-                    Use Kits
                 </Button>
                 <Button
                     style={{
@@ -158,4 +139,7 @@ const mapStateToProps = state => {
     return { auth };
 };
 
-export default connect(mapStateToProps, { logoutUser })(HospitalScreen);
+export default connect(
+    mapStateToProps,
+    { logoutUser }
+)(HospitalScreen);
