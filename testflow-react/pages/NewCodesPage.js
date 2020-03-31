@@ -51,7 +51,7 @@ class TrackerPage extends Component {
     renderCards = () => {
         return this.state.batches.map((batch, index) => {
             return (
-                <Card title={batch.date} style={{ width: 300 }}>
+                <Card title={batch.date} style={{ width: 300, margin: '20px' }}>
                     <h3>{batch.QRs.length} Codes</h3>
                     <Button
                         loading={this.state.downloadLoading === index}
@@ -118,7 +118,8 @@ class TrackerPage extends Component {
                         width: '100%',
                         display: 'flex',
                         flexDirection: 'row',
-                        flexWrap: 'wrap'
+                        flexWrap: 'wrap',
+                        justifyContent: 'center'
                     }}
                 >
                     {this.renderCards()}
@@ -133,7 +134,4 @@ const mapStateToProps = state => {
     return { user, isAuthenticated, error };
 };
 
-export default connect(
-    mapStateToProps,
-    null
-)(TrackerPage);
+export default connect(mapStateToProps, null)(TrackerPage);

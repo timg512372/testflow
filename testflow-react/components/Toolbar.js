@@ -15,13 +15,13 @@ import {
 } from '@ant-design/icons';
 import '../styles.less';
 
-const MUST_LOG_IN = [''];
+const MUST_LOG_IN = ['t', 'v', 'g'];
 
 class Toolbar extends Component {
     componentDidMount() {
-        console.log(this.props.user);
         if (!this.props.isAuthenticated && MUST_LOG_IN.includes(this.props.page)) {
-            Router.push('/notloggedin');
+            console.log('pushing');
+            Router.push('/');
         }
     }
 
