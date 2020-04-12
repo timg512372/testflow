@@ -56,7 +56,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoadingComplete: false
+            isLoadingComplete: false,
         };
         setCustomText({ style: { fontFamily: 'Lato' } });
     }
@@ -68,7 +68,7 @@ class App extends React.Component {
             // Load fonts
             await Font.loadAsync({
                 ...Ionicons.font,
-                Lato: require('./assets/fonts/Lato-Regular.ttf')
+                Lato: require('./assets/fonts/Lato-Regular.ttf'),
             });
         } catch (e) {
             // We might want to provide this error information to an error reporting service

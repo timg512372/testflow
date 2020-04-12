@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Image, View, AsyncStorage } from 'react-native';
 import {
     widthPercentageToDP as vw,
-    heightPercentageToDP as vh
+    heightPercentageToDP as vh,
 } from 'react-native-responsive-screen';
 import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
 import jwt_decode from 'jwt-decode';
 import { logoutUser, setCurrentUser } from '../redux/actions';
-import { LANDING } from '../assets/images';
+import { LANDING, LANDINGTABLET } from '../assets/images';
 import { connect } from 'react-redux';
 
 class LandingScreen extends React.Component {
@@ -40,18 +40,32 @@ class LandingScreen extends React.Component {
     }
 
     render() {
+        let aspectRatio = 'standard';
+
+        if (vh(100) / vw(100) > 17 / 9) {
+            aspectRatio = 'wide';
+        } else if (vh(100) / vw(100) < 4.5 / 3) {
+            aspectRatio = 'tablet';
+        }
+
         return (
             <View
                 style={{
                     backgroundColor: 'white',
                     height: vh(100),
                     flex: 0,
-                    alignItems: 'center'
+                    alignItems: 'center',
                 }}
             >
                 <Image
-                    source={LANDING}
-                    style={{ width: vw(100), height: (vw(100) * 1338) / 1080 }}
+                    source={aspectRatio == 'tablet' ? LANDINGTABLET : LANDING}
+                    style={{
+                        width: vw(100),
+                        height:
+                            aspectRatio == 'tablet'
+                                ? (vw(100) * 1752) / 2048
+                                : (vw(100) * 1338) / 1080,
+                    }}
                 />
                 <Button
                     style={{ marginTop: vh(7), marginBottom: vh(1) }}
@@ -77,7 +91,4 @@ class LandingScreen extends React.Component {
     }
 }
 
-export default connect(
-    null,
-    { logoutUser, setCurrentUser }
-)(LandingScreen);
+export default connect(null, { logoutUser, setCurrentUser })(LandingScreen);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Image, View, AsyncStorage } from 'react-native';
 import {
     widthPercentageToDP as vw,
-    heightPercentageToDP as vh
+    heightPercentageToDP as vh,
 } from 'react-native-responsive-screen';
 import { connect } from 'react-redux';
 import { Text, Input, Button, Toggle, CheckBox } from '@ui-kitten/components';
@@ -23,10 +23,10 @@ class FactoryStatScreen extends React.Component {
     };
 
     state = {
-        exports: []
+        exports: [],
     };
 
-    renderData = () => {
+    renderData = (aspectRatio) => {
         console.log(this.state.exports);
         const bubbles = this.state.exports.map((item, index) => {
             return (
@@ -38,7 +38,7 @@ class FactoryStatScreen extends React.Component {
                         borderColor: '#F2F2F2',
                         marginBottom: 5,
                         width: '100%',
-                        padding: 5
+                        padding: 5,
                     }}
                     key={index}
                 >
@@ -62,7 +62,7 @@ class FactoryStatScreen extends React.Component {
                         borderColor: '#F2F2F2',
                         marginBottom: 5,
                         width: '100%',
-                        padding: 5
+                        padding: vw(2),
                     }}
                     key={'blank'}
                 >
@@ -82,7 +82,7 @@ class FactoryStatScreen extends React.Component {
                 <Button
                     style={{
                         width: '100%',
-                        marginBottom: 10
+                        marginBottom: 10,
                     }}
                     key="button"
                     size="giant"
@@ -90,7 +90,7 @@ class FactoryStatScreen extends React.Component {
                     onPress={() =>
                         this.props.navigation.push('Scan', {
                             action: 'fl',
-                            text: 'Scanning Boxes Leaving Factory'
+                            text: 'Scanning Boxes Leaving Factory',
                         })
                     }
                 >
@@ -98,7 +98,7 @@ class FactoryStatScreen extends React.Component {
                 </Button>
                 <Button
                     style={{
-                        width: '100%'
+                        width: '100%',
                     }}
                     key="something"
                     size="giant"
@@ -115,24 +115,31 @@ class FactoryStatScreen extends React.Component {
     };
 
     render() {
+        let aspectRatio = 'standard';
+
+        if (vh(100) / vw(100) > 17 / 9) {
+            aspectRatio = 'wide';
+        } else if (vh(100) / vw(100) < 4.5 / 3) {
+            aspectRatio = 'tablet';
+        }
         return (
             <View
                 style={{
                     backgroundColor: 'white',
                     height: vh(100),
                     flex: 0,
-                    alignItems: 'left'
+                    alignItems: 'left',
                 }}
             >
                 <Image source={TOP} style={{ width: vw(100), height: (vw(100) * 602) / 1080 }} />
                 <Text
                     style={{
-                        marginTop: -vh(18),
-                        marginBottom: vh(18),
+                        marginTop: aspectRatio == 'tablet' ? -vh(25) : -vh(18),
+                        marginBottom: aspectRatio == 'tablet' ? vh(25) : vh(18),
                         marginLeft: 20,
                         color: 'white',
                         textAlign: 'left',
-                        fontWeight: '700'
+                        fontWeight: '700',
                     }}
                     category="h1"
                 >
@@ -143,22 +150,19 @@ class FactoryStatScreen extends React.Component {
                         width: vw(100),
                         flex: 1,
                         alignItems: 'stretch',
-                        padding: 10
+                        padding: 10,
                     }}
                 >
-                    {this.renderData()}
+                    {this.renderData(aspectRatio)}
                 </View>
             </View>
         );
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     const { auth } = state;
     return { auth };
 };
 
-export default connect(
-    mapStateToProps,
-    { logoutUser }
-)(FactoryStatScreen);
+export default connect(mapStateToProps, { logoutUser })(FactoryStatScreen);

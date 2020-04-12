@@ -5,7 +5,7 @@
         "privacy": "public",
         "sdkVersion": "36.0.0",
         "platforms": ["ios", "android", "web"],
-        "version": "1.0.0",
+        "version": "1.0.1",
         "orientation": "portrait",
         "icon": "./assets/images/icon.png",
         "scheme": "myapp",
@@ -20,7 +20,11 @@
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "testflow-covid19hackathon",
+            "infoPlist": {
+                "NSCameraUsageDescription": "This app uses the camera to scan QR codes."
+            }
         }
     }
 }
