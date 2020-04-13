@@ -5,18 +5,22 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import {
     widthPercentageToDP as vw,
-    heightPercentageToDP as vh
+    heightPercentageToDP as vh,
 } from 'react-native-responsive-screen';
-import { handleLogin, changeLUserName, changeLPassword } from '../redux/actions';
+import { handleLogin, changeLUserName, changeLPassword, clearErrors } from '../redux/actions';
 
 class LoginScreen extends React.Component {
+    componentDidMount() {
+        this.props.clearErrors();
+    }
+
     render() {
         return (
             <View
                 style={{
                     flex: 1,
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
                 }}
             >
                 <LinearGradient
@@ -25,7 +29,7 @@ class LoginScreen extends React.Component {
                         width: vw(100),
                         height: vh(100),
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                     }}
                 >
                     <View
@@ -33,7 +37,7 @@ class LoginScreen extends React.Component {
                             width: vw(80),
                             height: vh(60),
                             backgroundColor: 'white',
-                            borderRadius: vw(4)
+                            borderRadius: vw(4),
                         }}
                     >
                         <Text
@@ -46,13 +50,13 @@ class LoginScreen extends React.Component {
                         <Input
                             placeholder="Username"
                             value={this.props.auth.lUserName}
-                            onChangeText={val => this.props.changeLUserName(val)}
+                            onChangeText={(val) => this.props.changeLUserName(val)}
                             style={{ margin: 10, borderRadius: 8 }}
                         />
                         <Input
                             placeholder="Password"
                             value={this.props.auth.lPassword}
-                            onChangeText={val => this.props.changeLPassword(val)}
+                            onChangeText={(val) => this.props.changeLPassword(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                             secureTextEntry={true}
                         />
@@ -61,7 +65,7 @@ class LoginScreen extends React.Component {
                                 view: 1,
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                marginHorizontal: 30
+                                marginHorizontal: 30,
                             }}
                         >
                             <Button
@@ -98,11 +102,14 @@ class LoginScreen extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     const { auth } = state;
     return { auth };
 };
 
-export default connect(mapStateToProps, { handleLogin, changeLUserName, changeLPassword })(
-    LoginScreen
-);
+export default connect(mapStateToProps, {
+    handleLogin,
+    changeLUserName,
+    changeLPassword,
+    clearErrors,
+})(LoginScreen);

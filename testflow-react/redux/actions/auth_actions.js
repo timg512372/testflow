@@ -5,15 +5,15 @@ import jwt_decode from 'jwt-decode';
 import Router from 'next/router';
 
 export const registerUser = (user, callback) => {
-    return async dispatch => {
+    return async (dispatch) => {
         dispatch({
-            type: types.GET_LOADING
+            type: types.GET_LOADING,
         });
         try {
             const res = await axios({
                 method: 'post',
                 url: `${process.env.SERVER_URL}/api/auth/register`,
-                data: { ...user }
+                data: { ...user },
             });
 
             const { token } = res.data;
@@ -28,18 +28,18 @@ export const registerUser = (user, callback) => {
             showErrorModal(err.message);
             dispatch({
                 type: types.GET_ERRORS,
-                payload: err.message
+                payload: err.message,
             });
         }
     };
 };
 
-export const loginUser = (user, callback) => async dispatch => {
+export const loginUser = (user, callback) => async (dispatch) => {
     try {
         const res = await axios({
             method: 'post',
             url: `${process.env.SERVER_URL}/api/auth/login`,
-            data: { ...user }
+            data: { ...user },
         });
 
         const { token } = res.data;
@@ -51,19 +51,19 @@ export const loginUser = (user, callback) => async dispatch => {
     } catch (err) {
         dispatch({
             type: types.GET_ERRORS,
-            payload: err.response ? err.response : 'Unknown'
+            payload: err.response ? err.response : 'Unknown',
         });
     }
 };
 
-export const setCurrentUser = decoded => {
+export const setCurrentUser = (decoded) => {
     return {
         type: types.SET_CURRENT_USER,
-        payload: decoded
+        payload: decoded,
     };
 };
 
-export const logoutUser = callback => dispatch => {
+export const logoutUser = (callback) => (dispatch) => {
     localStorage.removeItem('jwtToken');
     setAuthToken(false);
     dispatch(setCurrentUser({}));

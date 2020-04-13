@@ -5,7 +5,7 @@ import { Text, Input, Button, Select, Spinner } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
     widthPercentageToDP as vw,
-    heightPercentageToDP as vh
+    heightPercentageToDP as vh,
 } from 'react-native-responsive-screen';
 import {
     changeUserName,
@@ -14,20 +14,24 @@ import {
     changePasswordConfirm,
     changeLocation,
     changeRole,
-    handleRegister
+    handleRegister,
+    clearErrors,
 } from '../redux/actions';
 
 class NewInstitutionScreen extends React.Component {
+    componentDidMount() {
+        this.props.clearErrors();
+    }
+
     render() {
         return (
             <KeyboardAvoidingView
                 style={{
                     flex: 1,
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
                 }}
                 behavior="padding"
-                enabled
             >
                 <LinearGradient
                     colors={['#617DCC', '#2F4B98']}
@@ -35,7 +39,7 @@ class NewInstitutionScreen extends React.Component {
                         width: vw(100),
                         height: vh(100),
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                     }}
                 >
                     <View
@@ -43,7 +47,7 @@ class NewInstitutionScreen extends React.Component {
                             width: vw(80),
                             height: vh(80),
                             backgroundColor: 'white',
-                            borderRadius: vw(4)
+                            borderRadius: vw(4),
                         }}
                     >
                         <Text
@@ -56,19 +60,33 @@ class NewInstitutionScreen extends React.Component {
                         <Input
                             placeholder="Institution Name"
                             value={this.props.auth.institution}
-                            onChangeText={val => this.props.changeInstitution(val)}
+                            onChangeText={(val) => this.props.changeInstitution(val)}
                             style={{ margin: 10, borderRadius: 8 }}
+                        />
+                        <Select
+                            placeholder="Institution Type"
+                            data={[{ text: 'Factory' }, { text: 'Hospital' }, { text: 'Lab' }]}
+                            selectedOption={{
+                                text: this.props.auth.role
+                                    ? this.props.auth.role.text.charAt(0).toUpperCase() +
+                                      this.props.auth.role.text.slice(1)
+                                    : '',
+                            }}
+                            onSelect={(val) =>
+                                this.props.changeRole({ text: val.text.toLowerCase() })
+                            }
+                            style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
                         />
                         <Input
                             placeholder="Username"
                             value={this.props.auth.userName}
-                            onChangeText={val => this.props.changeUserName(val)}
+                            onChangeText={(val) => this.props.changeUserName(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                         />
                         <Input
                             placeholder="Password"
                             value={this.props.auth.password}
-                            onChangeText={val => this.props.changePassword(val)}
+                            onChangeText={(val) => this.props.changePassword(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                             secureTextEntry={true}
                         />
@@ -76,7 +94,7 @@ class NewInstitutionScreen extends React.Component {
                         <Input
                             placeholder="Confirm Password"
                             value={this.props.auth.password_confirm}
-                            onChangeText={val => this.props.changePasswordConfirm(val)}
+                            onChangeText={(val) => this.props.changePasswordConfirm(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                             secureTextEntry={true}
                         />
@@ -84,22 +102,8 @@ class NewInstitutionScreen extends React.Component {
                         <Input
                             placeholder="Location"
                             value={this.props.auth.location}
-                            onChangeText={val => this.props.changeLocation(val)}
+                            onChangeText={(val) => this.props.changeLocation(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
-                        />
-
-                        <Select
-                            data={[{ text: 'Factory' }, { text: 'Hospital' }, { text: 'Lab' }]}
-                            selectedOption={{
-                                text: this.props.auth.role
-                                    ? this.props.auth.role.text.charAt(0).toUpperCase() +
-                                      this.props.auth.role.text.slice(1)
-                                    : ''
-                            }}
-                            onSelect={val =>
-                                this.props.changeRole({ text: val.text.toLowerCase() })
-                            }
-                            style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
                         />
 
                         <View
@@ -107,7 +111,7 @@ class NewInstitutionScreen extends React.Component {
                                 view: 1,
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                marginHorizontal: 30
+                                marginHorizontal: 30,
                             }}
                         >
                             <Button
@@ -136,9 +140,11 @@ class NewInstitutionScreen extends React.Component {
                                 Back
                             </Button>
                         </View>
-                        {/* <Text status="danger" style={{ textAlign: 'center', marginTop: 5 }}>
-                            Error: {this.props.auth.error}
-                        </Text> */}
+                        {this.props.auth.error ? (
+                            <Text status="danger" style={{ textAlign: 'center', marginTop: 5 }}>
+                                Error: {this.props.auth.error}
+                            </Text>
+                        ) : null}
                     </View>
                 </LinearGradient>
             </KeyboardAvoidingView>
@@ -146,7 +152,7 @@ class NewInstitutionScreen extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     const { auth } = state;
     return { auth };
 };
@@ -158,5 +164,6 @@ export default connect(mapStateToProps, {
     changePasswordConfirm,
     changeLocation,
     changeRole,
-    handleRegister
+    handleRegister,
+    clearErrors,
 })(NewInstitutionScreen);

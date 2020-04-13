@@ -4,59 +4,59 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import { SERVER_URL } from '../../dotenv.json';
 
-export const changeUserName = userName => {
+export const changeUserName = (userName) => {
     return {
         type: types.CHANGE_USER_NAME,
-        payload: userName
+        payload: userName,
     };
 };
 
-export const changeInstitution = institution => {
+export const changeInstitution = (institution) => {
     return {
         type: types.CHANGE_INSTITUTION,
-        payload: institution
+        payload: institution,
     };
 };
 
-export const changePassword = password => {
+export const changePassword = (password) => {
     return {
         type: types.CHANGE_PASSWORD,
-        payload: password
+        payload: password,
     };
 };
 
-export const changePasswordConfirm = password_confirm => {
+export const changePasswordConfirm = (password_confirm) => {
     return {
         type: types.CHANGE_PASSWORD_CONFIRM,
-        payload: password_confirm
+        payload: password_confirm,
     };
 };
 
-export const changeLocation = location => {
+export const changeLocation = (location) => {
     return {
         type: types.CHANGE_LOCATION,
-        payload: location
+        payload: location,
     };
 };
 
-export const changeRole = role => {
+export const changeRole = (role) => {
     return {
         type: types.CHANGE_ROLE,
-        payload: role
+        payload: role,
     };
 };
 
-export const changeLUserName = userName => {
+export const changeLUserName = (userName) => {
     return {
         type: types.CHANGE_L_USER_NAME,
-        payload: userName
+        payload: userName,
     };
 };
 
-export const changeLPassword = password => {
+export const changeLPassword = (password) => {
     return {
         type: types.CHANGE_L_PASSWORD,
-        payload: password
+        payload: password,
     };
 };
 
@@ -68,7 +68,7 @@ export const handleRegister = (
     role,
     location,
     navigation
-) => async dispatch => {
+) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
 
@@ -77,7 +77,7 @@ export const handleRegister = (
         const res = await axios({
             method: 'post',
             url: `${SERVER_URL}/api/auth/register`,
-            data: { institution, userName, password, password_confirm, role, location }
+            data: { institution, userName, password, password_confirm, role, location },
         });
 
         const { token } = res.data;
@@ -102,13 +102,13 @@ export const handleRegister = (
     }
 };
 
-export const handleLogin = (userName, password, navigation) => async dispatch => {
+export const handleLogin = (userName, password, navigation) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
         const res = await axios({
             method: 'post',
             url: `${SERVER_URL}/api/auth/login`,
-            data: { userName, password }
+            data: { userName, password },
         });
 
         const { token } = res.data;
@@ -133,30 +133,37 @@ export const handleLogin = (userName, password, navigation) => async dispatch =>
     }
 };
 
-export const setError = error => {
+export const setError = (error) => {
     return {
         type: types.GET_ERRORS,
-        payload: error
+        payload: error,
     };
 };
 
-export const setCurrentUser = decoded => {
+export const setCurrentUser = (decoded) => {
     return {
         type: types.SET_CURRENT_USER,
-        payload: decoded
+        payload: decoded,
     };
 };
 
-export const setLoading = loading => {
+export const setLoading = (loading) => {
     return {
         type: types.SET_LOADING,
-        payload: loading
+        payload: loading,
     };
 };
 
-export const logoutUser = navigation => async dispatch => {
+export const logoutUser = (navigation) => async (dispatch) => {
     console.log('logging out user');
     await AsyncStorage.removeItem('jwtToken');
     navigation.navigate('Landing');
     dispatch(setCurrentUser({}));
+};
+
+export const clearErrors = () => {
+    return {
+        type: types.GET_ERRORS,
+        payload: '',
+    };
 };
