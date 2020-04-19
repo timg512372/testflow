@@ -48,7 +48,7 @@ class LoginScreen extends React.Component {
                             Log In
                         </Text>
                         <Input
-                            placeholder="Username"
+                            placeholder="Email"
                             value={this.props.auth.lUserName}
                             onChangeText={(val) => this.props.changeLUserName(val)}
                             style={{ margin: 10, borderRadius: 8 }}

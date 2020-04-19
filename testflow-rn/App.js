@@ -22,6 +22,7 @@ import NewInstitutionScreen from './screens/NewInstitutionScreen';
 import FactoryStatScreen from './screens/FactoryStatScreen';
 import HospitalScreen from './screens/HospitalScreen';
 import LabScreen from './screens/LabScreen';
+import NotConfirmedScreen from './screens/NotConfirmedScreen';
 
 const Stack = createStackNavigator();
 
@@ -99,6 +100,7 @@ class App extends React.Component {
                                     name="NewInstitution"
                                     component={NewInstitutionScreen}
                                 />
+                                <Stack.Screen name="NotConfirmed" component={NotConfirmedScreen} />
                                 <Stack.Screen name="HospitalMain" component={Hospital} />
                                 <Stack.Screen name="FactoryMain" component={Factory} />
                                 <Stack.Screen name="LabMain" component={Lab} />

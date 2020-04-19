@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Image, View, KeyboardAvoidingView } from 'react-native';
+import { Image, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { Text, Input, Button, Select, Spinner } from '@ui-kitten/components';
+import { Text, Input, Button, Select, Spinner, Tooltip, Icon } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
     widthPercentageToDP as vw,
@@ -22,6 +22,10 @@ class NewInstitutionScreen extends React.Component {
     componentDidMount() {
         this.props.clearErrors();
     }
+
+    state = {
+        showToolTip: '',
+    };
 
     render() {
         return (
@@ -78,18 +82,39 @@ class NewInstitutionScreen extends React.Component {
                             style={{ margin: 10, marginTop: 0, borderRadius: 8 }}
                         />
                         <Input
-                            placeholder="Username"
+                            placeholder="Email"
                             value={this.props.auth.userName}
                             onChangeText={(val) => this.props.changeUserName(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                         />
-                        <Input
-                            placeholder="Password"
-                            value={this.props.auth.password}
-                            onChangeText={(val) => this.props.changePassword(val)}
-                            style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
-                            secureTextEntry={true}
-                        />
+                        <Tooltip
+                            text="Passwords must be at least 8 characters and contain numbers and special characters"
+                            visible={this.state.showToolTip}
+                            onBackdropPress={() => this.setState({ showToolTip: false })}
+                            placement="top"
+                            style={{ width: vw(60) }}
+                        >
+                            <Input
+                                placeholder="Password"
+                                value={this.props.auth.password}
+                                onChangeText={(val) => this.props.changePassword(val)}
+                                style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
+                                secureTextEntry={true}
+                                icon={() => (
+                                    <TouchableOpacity
+                                        onPress={() =>
+                                            this.setState({ showToolTip: !this.state.showToolTip })
+                                        }
+                                    >
+                                        <Icon
+                                            name="info"
+                                            style={{ width: 24, height: 24 }}
+                                            fill="#2F4B98"
+                                        />
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        </Tooltip>
 
                         <Input
                             placeholder="Confirm Password"
@@ -100,7 +125,7 @@ class NewInstitutionScreen extends React.Component {
                         />
 
                         <Input
-                            placeholder="Location"
+                            placeholder="Institution Address"
                             value={this.props.auth.location}
                             onChangeText={(val) => this.props.changeLocation(val)}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}

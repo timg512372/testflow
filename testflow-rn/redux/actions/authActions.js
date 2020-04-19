@@ -72,6 +72,29 @@ export const handleRegister = (
     try {
         dispatch(setLoading(true));
 
+        if (password == password_confirm) {
+            throw { message: "Passwords don't match" };
+        } else if (password.length < 8) {
+            throw { message: 'Password needs to be at least 8 characters' };
+        }
+
+        let number = false;
+        let special = false;
+        for (let i = 0; i < password.length; i++) {
+            let num = password.charCodeAt(i);
+            if (num >= 48 && num <= 57) {
+                number = true;
+            } else if (!(num >= 65 && num <= 90) && !(num >= 97 && num <= 122)) {
+                special = true;
+            }
+        }
+
+        if (!number) {
+            throw { message: 'Password needs to contain a number' };
+        } else if (!special) {
+            throw { message: 'Password needs to contain a special character' };
+        }
+
         console.log(institution, userName, password, password_confirm, role, location);
 
         const res = await axios({
@@ -98,7 +121,12 @@ export const handleRegister = (
         }
     } catch (e) {
         console.log(e);
-        dispatch(setError(e.message));
+        let error = '';
+        Object.keys(e.response.data).forEach((key) => (error += e.response.data[key] + '\n'));
+        if (error == '') {
+            error = 'Please try again later';
+        }
+        dispatch(setError(error));
     }
 };
 
@@ -129,7 +157,12 @@ export const handleLogin = (userName, password, navigation) => async (dispatch) 
         }
     } catch (e) {
         console.log(e);
-        dispatch(setError(e.message));
+        let error = '';
+        Object.keys(e.response.data).forEach((key) => (error += e.response.data[key] + '\n'));
+        if (error == '') {
+            error = 'Please try again later';
+        }
+        dispatch(setError(error));
     }
 };
 

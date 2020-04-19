@@ -86,6 +86,15 @@ class LandingScreen extends React.Component {
                 >
                     Register
                 </Button>
+                <Button
+                    appearance="ghost"
+                    size="giant"
+                    status="basic"
+                    textStyle={{ fontWeight: '300', fontSize: 25 }}
+                    onPress={() => this.props.navigation.push('NotConfirmed')}
+                >
+                    See Email Not Confirmed Page
+                </Button>
             </View>
         );
     }
