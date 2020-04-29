@@ -72,28 +72,28 @@ export const handleRegister = (
     try {
         dispatch(setLoading(true));
 
-        // if (password.length < 8) {
-        //     throw { message: 'Password needs to be at least 8 characters' };
-        // }
+        if (password.length < 8) {
+            throw { message: 'Password needs to be at least 8 characters' };
+        }
 
-        // let number = false;
-        // let special = false;
-        // for (let i = 0; i < password.length; i++) {
-        //     let num = password.charCodeAt(i);
-        //     if (num >= 48 && num <= 57) {
-        //         number = true;
-        //     } else if (!(num >= 65 && num <= 90) && !(num >= 97 && num <= 122)) {
-        //         special = true;
-        //     }
-        // }
+        let number = false;
+        let special = false;
+        for (let i = 0; i < password.length; i++) {
+            let num = password.charCodeAt(i);
+            if (num >= 48 && num <= 57) {
+                number = true;
+            } else if (!(num >= 65 && num <= 90) && !(num >= 97 && num <= 122)) {
+                special = true;
+            }
+        }
 
-        // if (!number) {
-        //     throw { message: 'Password needs to contain a number' };
-        // } else if (!special) {
-        //     throw { message: 'Password needs to contain a special character' };
-        // } else if (password == password_confirm) {
-        //     throw { message: "Passwords don't match" };
-        // }
+        if (!number) {
+            throw { message: 'Password needs to contain a number' };
+        } else if (!special) {
+            throw { message: 'Password needs to contain a special character' };
+        } else if (password == password_confirm) {
+            throw { message: "Passwords don't match" };
+        }
 
         console.log(institution, userName, password, password_confirm, role, location);
 
