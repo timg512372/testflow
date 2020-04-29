@@ -72,58 +72,55 @@ export const handleRegister = (
     try {
         dispatch(setLoading(true));
 
-        if (password == password_confirm) {
-            throw { message: "Passwords don't match" };
-        } else if (password.length < 8) {
-            throw { message: 'Password needs to be at least 8 characters' };
-        }
+        // if (password.length < 8) {
+        //     throw { message: 'Password needs to be at least 8 characters' };
+        // }
 
-        let number = false;
-        let special = false;
-        for (let i = 0; i < password.length; i++) {
-            let num = password.charCodeAt(i);
-            if (num >= 48 && num <= 57) {
-                number = true;
-            } else if (!(num >= 65 && num <= 90) && !(num >= 97 && num <= 122)) {
-                special = true;
-            }
-        }
+        // let number = false;
+        // let special = false;
+        // for (let i = 0; i < password.length; i++) {
+        //     let num = password.charCodeAt(i);
+        //     if (num >= 48 && num <= 57) {
+        //         number = true;
+        //     } else if (!(num >= 65 && num <= 90) && !(num >= 97 && num <= 122)) {
+        //         special = true;
+        //     }
+        // }
 
-        if (!number) {
-            throw { message: 'Password needs to contain a number' };
-        } else if (!special) {
-            throw { message: 'Password needs to contain a special character' };
-        }
+        // if (!number) {
+        //     throw { message: 'Password needs to contain a number' };
+        // } else if (!special) {
+        //     throw { message: 'Password needs to contain a special character' };
+        // } else if (password == password_confirm) {
+        //     throw { message: "Passwords don't match" };
+        // }
 
         console.log(institution, userName, password, password_confirm, role, location);
 
         const res = await axios({
             method: 'post',
             url: `${SERVER_URL}/api/auth/register`,
-            data: { institution, userName, password, password_confirm, role, location },
+            data: {
+                institution,
+                userName: institution,
+                email: userName,
+                password,
+                password_confirm,
+                role,
+                location,
+            },
         });
-
-        const { token } = res.data;
-        await AsyncStorage.setItem('jwtToken', token);
-        const decoded = jwt_decode(token);
-        dispatch(setCurrentUser(decoded));
-
-        if (decoded.role == 'hospital') {
-            navigation.navigate('HospitalMain');
-        }
-
-        if (decoded.role == 'lab') {
-            navigation.navigate('LabMain');
-        }
-
-        if (decoded.role == 'factory') {
-            navigation.navigate('FactoryMain');
-        }
+        console.log('Finished registration');
+        navigation.navigate('Login');
     } catch (e) {
+        console.log('in error');
         console.log(e);
         let error = '';
-        Object.keys(e.response.data).forEach((key) => (error += e.response.data[key] + '\n'));
-        if (error == '') {
+        if (e.response) {
+            Object.keys(e.response.data).forEach((key) => (error += e.response.data[key] + '\n'));
+        } else if (e.message) {
+            error = e.message;
+        } else {
             error = 'Please try again later';
         }
         dispatch(setError(error));
@@ -139,6 +136,32 @@ export const handleLogin = (userName, password, navigation) => async (dispatch) 
             data: { userName, password },
         });
 
+        navigation.navigate('Verify', userName);
+    } catch (e) {
+        console.log(e);
+        let error = '';
+        if (e.response) {
+            Object.keys(e.response.data).forEach((key) => (error += e.response.data[key] + '\n'));
+        } else if (e.message) {
+            error = e.message;
+        } else {
+            error = 'Please try again later';
+        }
+        dispatch(setError(error));
+    }
+};
+
+export const handleVerify = (code, userName, navigation) => async (dispatch) => {
+    try {
+        console.log(code);
+        console.log('help');
+        dispatch(setLoading(true));
+        const res = await axios({
+            method: 'post',
+            url: `${SERVER_URL}/api/auth/verify`,
+            data: { userName, code },
+        });
+
         const { token } = res.data;
         await AsyncStorage.setItem('jwtToken', token);
         const decoded = jwt_decode(token);
@@ -158,8 +181,11 @@ export const handleLogin = (userName, password, navigation) => async (dispatch) 
     } catch (e) {
         console.log(e);
         let error = '';
-        Object.keys(e.response.data).forEach((key) => (error += e.response.data[key] + '\n'));
-        if (error == '') {
+        if (e.response) {
+            Object.keys(e.response.data).forEach((key) => (error += e.response.data[key] + '\n'));
+        } else if (e.message) {
+            error = e.message;
+        } else {
             error = 'Please try again later';
         }
         dispatch(setError(error));
@@ -167,6 +193,7 @@ export const handleLogin = (userName, password, navigation) => async (dispatch) 
 };
 
 export const setError = (error) => {
+    console.log(error);
     return {
         type: types.GET_ERRORS,
         payload: error,

@@ -13,10 +13,10 @@ const INITIAL_STATE = {
     lPassword: '',
     error: '',
     page: '',
-    loading: ''
+    loading: '',
 };
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = INITIAL_STATE, action) {
     switch (action.type) {
         case types.CHANGE_INSTITUTION:
             return { ...state, institution: action.payload };
@@ -44,21 +44,21 @@ export default function(state = INITIAL_STATE, action) {
                     action.payload.constructor === Object
                 ),
                 user: action.payload,
-                loading: false
+                loading: false,
             };
         }
 
         case types.CHANGE_L_USER_NAME: {
             return {
                 ...state,
-                lUserName: action.payload
+                lUserName: action.payload,
             };
         }
 
         case types.CHANGE_L_PASSWORD: {
             return {
                 ...state,
-                lPassword: action.payload
+                lPassword: action.payload,
             };
         }
 

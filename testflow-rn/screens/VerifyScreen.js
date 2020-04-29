@@ -7,14 +7,19 @@ import {
     widthPercentageToDP as vw,
     heightPercentageToDP as vh,
 } from 'react-native-responsive-screen';
-import { handleLogin, changeLUserName, changeLPassword, clearErrors } from '../redux/actions';
+import { handleVerify, clearErrors } from '../redux/actions';
 
-class LoginScreen extends React.Component {
+class VerifyScreen extends React.Component {
+    state = {
+        code: '',
+    };
+
     componentDidMount() {
         this.props.clearErrors();
     }
 
     render() {
+        console.log(this.props.route.params);
         return (
             <View
                 style={{
@@ -42,21 +47,19 @@ class LoginScreen extends React.Component {
                     >
                         <Text
                             status="primary"
-                            category="h1"
-                            style={{ marginTop: vh(13), marginLeft: 20, fontWeight: '700' }}
+                            category="h2"
+                            style={{ marginTop: vh(5), textAlign: 'center' }}
                         >
-                            Log In
+                            One More Step
+                        </Text>
+                        <Text category="h5" style={{ margin: vh(4), textAlign: 'center' }}>
+                            Please check your email for a confirmation code. It may be in your junk
+                            folder.
                         </Text>
                         <Input
-                            placeholder="Institution Name"
-                            value={this.props.auth.lUserName}
-                            onChangeText={(val) => this.props.changeLUserName(val)}
-                            style={{ margin: 10, borderRadius: 8 }}
-                        />
-                        <Input
-                            placeholder="Password"
-                            value={this.props.auth.lPassword}
-                            onChangeText={(val) => this.props.changeLPassword(val)}
+                            placeholder="Enter Confirmation Code"
+                            value={this.state.code}
+                            onChangeText={(code) => this.setState({ code })}
                             style={{ margin: 10, borderRadius: 8, marginTop: 0 }}
                             secureTextEntry={true}
                         />
@@ -72,9 +75,9 @@ class LoginScreen extends React.Component {
                                 size="small"
                                 style={{ borderRadius: 8 }}
                                 onPress={() =>
-                                    this.props.handleLogin(
-                                        this.props.auth.lUserName,
-                                        this.props.auth.lPassword,
+                                    this.props.handleVerify(
+                                        this.state.code,
+                                        this.props.route.params,
                                         this.props.navigation
                                     )
                                 }
@@ -90,11 +93,6 @@ class LoginScreen extends React.Component {
                                 Back
                             </Button>
                         </View>
-                        {this.props.auth.error ? (
-                            <Text status="danger" style={{ textAlign: 'center', marginTop: 5 }}>
-                                Error: {this.props.auth.error}
-                            </Text>
-                        ) : null}
                     </View>
                 </LinearGradient>
             </View>
@@ -108,8 +106,6 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-    handleLogin,
-    changeLUserName,
-    changeLPassword,
     clearErrors,
-})(LoginScreen);
+    handleVerify,
+})(VerifyScreen);
