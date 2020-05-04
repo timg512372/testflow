@@ -91,7 +91,7 @@ export const handleRegister = (
             throw { message: 'Password needs to contain a number' };
         } else if (!special) {
             throw { message: 'Password needs to contain a special character' };
-        } else if (password == password_confirm) {
+        } else if (password.localeCompare(password_confirm) !== 0) {
             throw { message: "Passwords don't match" };
         }
 
